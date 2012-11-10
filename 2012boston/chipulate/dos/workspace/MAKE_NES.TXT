@@ -1,0 +1,53 @@
+; INES header setup
+    .inesprg    2   ; One 16k prg bank
+    .ineschr    0   ; One 8k  chr bank
+    .inesmir    0   ; Vertical map mirroring
+    .inesmap    19   ; Use mapper 19
+
+    .bank 0
+    .org  $8000
+
+	.include	"sounddrv.h"
+	.include	"fds.h"
+	.include	"n106.h"
+
+	.include	"freqdata.h"
+	.include	"effect.h"
+
+    .bank 3
+	.org	$FF00
+
+Reset_Routine:
+	cld
+	sei
+.WaitV:	
+	lda	$2002
+	bpl	.WaitV
+	ldx	#$00
+	stx	$2000
+	stx	$2001
+	lda	#$80
+	sta	$2000
+	lda	#$0B
+	cli
+
+	jsr	sound_init
+
+
+.Loop:
+	jmp	.Loop
+
+;---------------------------------------------------------------------
+NMI_Routine:
+
+	jsr	sound_driver_start
+	rti
+
+IRQ_Routine:		;Dummy label
+	rti
+
+	.org	$FFFA
+	.dw		NMI_Routine
+	.dw		Reset_Routine
+	.dw		IRQ_Routine
+

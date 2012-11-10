@@ -1,0 +1,52 @@
+    .bank	0
+    .org	$8000
+
+;NSF HEADER
+	db	"NESM",$1A	;
+	db	1		;Ver.
+	db	1		;Number of Songs
+	db	1		;Start Song No.
+	dw	LOAD		;Load
+	dw	INIT		;Init
+	dw	PLAY		;Play
+  .org	$800E
+	db	"Auto-generated song name"
+	db	$00
+  .org	$802E
+	db	"functiontelechy"
+	db	$00
+  .org	$804E
+	db	"Chipulate"
+	db	$00
+  .org	$806E
+	dw	16666		;1000000 / (freq of NTSC) sec
+	db	0,0,0,0,0,0,0,0 ;Bankswitch Init Values
+	dw	20000		;1000000 / (freq of PAL)  sec
+	db	%00
+;                ||
+;                |+-------------- PAL/NTSC
+;                +--------------- dual PAL/NTSC tune or not
+	db	SOUND_GENERATOR
+;                ||||||
+;                |||||+---------- VRC6
+;                ||||+----------- VRC7
+;                |||+------------ FDS
+;                ||+------------- MMC5
+;                |+-------------- Namcot106
+;                +--------------- FME-07
+	db	0,0,0,0
+LOAD:
+INIT:
+	jsr	sound_init
+	rts
+PLAY:
+	jsr	sound_driver_start
+	rts
+;-------------------------------------------------------------------------------
+
+	.include	"sounddrv.h"
+	.include	"fds.h"
+	.include	"n106.h"
+	.include	"freqdata.h"
+	.include	"effect.h"
+    .include    "songdata.h"

@@ -1,0 +1,66 @@
+;
+; N-Line AT用
+;
+		.list
+
+		.inesprg	2	; One 16k prg bank
+		.ineschr	0	; One 8k  chr bank
+		.inesmir	0	; Vertical map mirroring
+		.inesmap	0	; Use mapper 0
+
+		.bank	0
+		.org	$8000
+; N-Line ATで使用
+		.dw	Reset_Routine
+		.dw	NMI_Routine
+		.dw	IRQ_Routine
+
+; MCK本体
+		.include	"sounddrv.h"
+		.include	"fds.h"
+		.include	"n106.h"
+
+		.include	"freqdata.h"
+		.include	"effect.h"
+
+		.bank 2		; 付けちゃダメ
+
+		.org	$DF00
+Reset_Routine:
+		sei
+		ldx	#$00
+		stx	$2000
+;		stx	$2001	; 非表示にしない
+		sta	$FF
+		ldx	#$FF
+		txs
+
+; MCK使用領域初期化(しといてくれよなー)
+		ldx	#$00
+		lda	#$00
+.rclr
+		sta	$0700,x
+		inx
+		bne	.rclr
+
+.WaitV:
+		lda	$2002
+		bpl	.WaitV
+
+;		lda	#$02		;然るべき時用
+		jsr	sound_init
+
+		lda	#$80
+		sta	$2000
+		cli
+.Loop:
+		jmp	.Loop
+
+;---------------------------------------------------------------------
+NMI_Routine:
+		jsr	sound_driver_start
+		rti
+
+IRQ_Routine:			;Dummy label
+		rti
+
