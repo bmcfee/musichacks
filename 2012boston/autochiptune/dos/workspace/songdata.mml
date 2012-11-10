@@ -1,14 +1,14 @@
 @v0 = { 15 }
 @v1 = { 10 }
 
-ABCDE t84
+ABCDE t109
 
 A l8 o4 @01 @v0
-A c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+
+A c c+ c d a d d a d d a d d g d d f+ d c+ d c+ d f+ d g d g c a c c g c c b c b a b b g b b d b g f+ g g f+ g d a d d a d d g d d f+ d d a d g d g c d c c g c c b c b a b b g b b d b g f+ g g d g g f+ g d a d d c+ d d a d d c+ d d c+ d a e a c b c c b c c g c b c b b c b c a+ c g f+ g d a d d c+ d d c+ d d c+ d d c+ d d c+ d a e a c b c d+ e d+ c d c a+ c a+ c a+ c c a+ c e c e d+ e d+ d g d g f+ g f e f d d+ d d c+ d d c+ d d c+ d a e a a d a d c+ d c b c c b c c b c b c b b c b b c b g d g g f+ g d c+ d d c+ d d c+ d d c+ d d a d d c+ d a a+ a a e a c b c c g c c b c b c b b c b b c b g f+ g g f+ g d c+ d d c+ d d c+ d d a d d c+ d d c+ d d c+ d d g d c b c c g c c b c b c b b c b b c b g f+ g g f+ g g f+ g d c+ d d c+ d d c+ d d c+ d d c+ d a e a a g+ a d c+ d c g c c b c c b c c b c c g c c b c b c b b c b b c b
 
 B l8 o5 @02 @v1
-B c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+
+B c c+ c d a d d a d d a d d g d d f+ d c+ d c+ d f+ d g d g c a c c g c c b c b a b b g b b d b g f+ g g f+ g d a d d a d d g d d f+ d d a d g d g c d c c g c c b c b a b b g b b d b g f+ g g d g g f+ g d a d d c+ d d a d d c+ d d c+ d a e a c b c c b c c g c b c b b c b c a+ c g f+ g d a d d c+ d d c+ d d c+ d d c+ d d c+ d a e a c b c d+ e d+ c d c a+ c a+ c a+ c c a+ c e c e d+ e d+ d g d g f+ g f e f d d+ d d c+ d d c+ d d c+ d a e a a d a d c+ d c b c c b c c b c b c b b c b b c b g d g g f+ g d c+ d d c+ d d c+ d d c+ d d a d d c+ d a a+ a a e a c b c c g c c b c b c b b c b b c b g f+ g g f+ g d c+ d d c+ d d c+ d d a d d c+ d d c+ d d c+ d d g d c b c c g c c b c b c b b c b b c b g f+ g g f+ g g f+ g d c+ d d c+ d d c+ d d c+ d d c+ d a e a a g+ a d c+ d c g c c b c c b c c b c c g c c b c b c b b c b b c b
 
 C l8 o3 q7
-C c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+ c+ c c+
+C c c+ c d a d d a d d a d d g d d f+ d c+ d c+ d f+ d g d g c a c c g c c b c b a b b g b b d b g f+ g g f+ g d a d d a d d g d d f+ d d a d g d g c d c c g c c b c b a b b g b b d b g f+ g g d g g f+ g d a d d c+ d d a d d c+ d d c+ d a e a c b c c b c c g c b c b b c b c a+ c g f+ g d a d d c+ d d c+ d d c+ d d c+ d d c+ d a e a c b c d+ e d+ c d c a+ c a+ c a+ c c a+ c e c e d+ e d+ d g d g f+ g f e f d d+ d d c+ d d c+ d d c+ d a e a a d a d c+ d c b c c b c c b c b c b b c b b c b g d g g f+ g d c+ d d c+ d d c+ d d c+ d d a d d c+ d a a+ a a e a c b c c g c c b c b c b b c b b c b g f+ g g f+ g d c+ d d c+ d d c+ d d a d d c+ d d c+ d d c+ d d g d c b c c g c c b c b c b b c b b c b g f+ g g f+ g g f+ g d c+ d d c+ d d c+ d d c+ d d c+ d a e a a g+ a d c+ d c g c c b c c b c c b c c g c c b c b c b b c b b c b
 

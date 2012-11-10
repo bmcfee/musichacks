@@ -62,6 +62,24 @@ def loadCachedAnalysis(artist=None, title=None):
         pass
     return A
 
+def getTwoLargest(C):
+
+    (v1, v2) = (-1, -1)
+    (i1, i2) = (0, 0)
+
+    for (i, v) in enumerate(C):
+        if v > v1:
+            i2 = i1
+            v2 = v1
+            i1 = i
+            v1 = v
+        elif v > v2:
+            v2 = v
+            i2 = i
+            pass
+        pass
+    return (i1, i2)
+
 
 def renderMML(A):
     # Step 2: extract tempo, key info
@@ -87,11 +105,10 @@ def renderMML(A):
     chroma  = [z['pitches'] for z in A['segments']]
     
     channels = [ [] ] * len(channel_names)
-    for C in chroma[:20]:
-        # FIXME:  2012-11-10 17:38:41 by Brian McFee <brm2132@columbia.edu>
-        # need POSITION Of nlargest, not the values
-        tones = map(int, heapq.nlargest(2, C))
-#         print 'Tones: (%2d,%2d) (%.2f,%.2f,%.2f) ' % (tones[0], tones[1], C[tones[0]], C[tones[1]], sum(C))
+    for C in chroma[:128]:
+        tones = getTwoLargest(C)
+
+        print 'Tones: (%2d,%2d) (%.2f,%.2f,%.2f) ' % (tones[0], tones[1], C[tones[0]], C[tones[1]], sum(C))
 
         channels[0].append(PITCHES[tones[0]])    # A-channel, primary tone
         channels[1].append(PITCHES[tones[1]])    # B-channel, secondary tone
