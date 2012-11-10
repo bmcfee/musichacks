@@ -10,15 +10,11 @@ softenve_lp_table:
 	dw	softenve_lp_001
 
 softenve_000:
-	db	$0a,$09,$08,$07,$06,$05,$04,$03
 softenve_lp_000:
-	db	$02,$ff
+	db	$0f,$ff
 softenve_001:
-	db	$0f,$0f,$0e,$0e,$0d,$0d,$0c,$0c
-	db	$0b,$0b,$0a,$0a,$09,$09,$08,$08
-	db	$07,$07,$06
 softenve_lp_001:
-	db	$06,$ff
+	db	$0a,$ff
 
 pitchenve_table:
 pitchenve_lp_table:

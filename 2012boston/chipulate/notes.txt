@@ -1,1 +1,22 @@
-wine cmd /c build.bat
+Build chain:
+
+from shell:
+    wine cmd /c build.bat
+
+then in dosbox:
+    make_nsf
+
+then NESMUSIC.NSF is the playable output
+
+
+Moar crazy ideas:
+
+    Use loudness profile to construct volume envelope
+
+    Infer bassline from key, current chord
+
+    Use danceability measure to adapt the drum hits and quantization on C channel
+
+    Use loudness_max to suppress gibberish
+
+    Use relative pitch intensity to scale A channel, B channel
