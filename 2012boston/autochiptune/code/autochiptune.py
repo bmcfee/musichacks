@@ -134,10 +134,10 @@ def renderMML(A):
     key     = A['track']['key']
     mode    = A['track']['mode']
 
-    print 'KEY: %s %s' % (PITCHES[int(key)], 'Maj' if mode else 'min'),
+#     print 'KEY: %s %s' % (PITCHES[int(key)], 'Maj' if mode else 'min'),
 
     tone_mask = getToneMask(key, mode)
-    print tone_mask
+#     print tone_mask
 
     channel_names = ['A', 'B', 'C', 'D', 'E']
     # Initialize envelopes
@@ -148,7 +148,7 @@ def renderMML(A):
 
     # Initialize pulse profiles
     profiles        = [ ] 
-    profiles.append('l8 o4 @01 @v15')
+    profiles.append('l8 o4 @02 @v15')
     profiles.append('l8 o4 @01 @v10')
     profiles.append('l8 o3 q6')
     profiles.append('l8 o0 @0')
@@ -166,11 +166,19 @@ def renderMML(A):
     lengths = []
 
     for (C, loudness, duration) in features[:int(CFG['max_frames'])]:
+        # Does chroma energy exceed the threshold for percussion?
+        PERCUSSION = sum(C) >= float(CFG['percussion_threshold'])
+
+        # Re-weight chroma against key profile
         C = tone_mask * C
+
+        # Extract two largest tones
         tones   = getTwoLargest(C)
+
+        # Compute duration from segment length
         lengths.append(estimateDuration(median_beat, duration))
     
-        print '[%.2f/%.2f/%3s] Tones: (%2s,%2s) (%.2f,%.2f,%.2f) ' % (duration, median_beat, lengths[-1], PITCHES[tones[0]], PITCHES[tones[1]], C[tones[0]], C[tones[1]], sum(C))
+#         print '[%.2f/%.2f/%3s] Tones: (%2s,%2s) (%.2f,%.2f,%.2f) ' % (duration, median_beat, lengths[-1], PITCHES[tones[0]], PITCHES[tones[1]], C[tones[0]], C[tones[1]], sum(C))
 
         channels[0].append(PITCHES[tones[0]] + lengths[-1])    # A-channel, primary tone
         channels[1].append(PITCHES[tones[1]] + lengths[-1])    # B-channel, secondary tone
@@ -189,7 +197,7 @@ def renderMML(A):
         # Step 5: detect/make up drum pulses (=> D)
         #   look at peakiness of chromagram
         #   flat chroma == drum hit
-        if sum(C) >= float(CFG['mode_weight']) * float(CFG['percussion_threshold']):
+        if PERCUSSION:
             #we're a drum hit
             # activate the noise and suppress the notes
 #             volumes[0][-1] = 0
@@ -260,7 +268,10 @@ def saveMML(output, M):
 
 if __name__ == '__main__':
     loadConfig('en.ini')
+    print 'Requesting analysis for ', sys.argv[2:], '...'
     A = loadCachedAnalysis(artist=sys.argv[2], title=sys.argv[3])
+    print 'Generating MML...'
     M = renderMML(A)
+    print 'Saving to ', sys.argv[1]
     saveMML(sys.argv[1], M)
     pass
