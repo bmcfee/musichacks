@@ -148,7 +148,7 @@ def renderMML(A):
     # Initialize pulse profiles
     profiles        = [ ] 
     profiles.append('l8 o4 @02 @v15')
-    profiles.append('l8 o4 @01 @v10')
+    profiles.append('l8 o5 @02 @v10')
     profiles.append('l8 o3 q6')
     profiles.append('l8 o0 @0')
 
@@ -186,7 +186,7 @@ def renderMML(A):
         volumes[0].append(quantizeVolume(loudness, C[tones[0]]))
         volumes[1].append(quantizeVolume(loudness, C[tones[1]]))
 
-        if C[tones[1]] < CFG['chord_energy_threshold'] * C[tones[0]]:
+        if C[tones[1]] < CFG['chord_energy_threshold']:# * C[tones[0]]:
             volumes[1][-1] = 0
             pass
 
