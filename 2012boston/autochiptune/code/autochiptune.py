@@ -113,10 +113,9 @@ def quantizeVolume(loudness, scale):
 
 def getToneMask(key, mode):
     key = int(key)
-                                                    #C C# D  D# E  F  F#  G G# A  A# B
-    T = 1 - (1 - float(CFG['mode_weight'])) * numpy.array([1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1])
-    T = (1 + float(CFG['mode_weight'])) - T
+    w = float(CFG['mode_weight'])
 
+    T = w + (1 - w) * numpy.array([1,0,1,0,1,1,0,1,0,1,0,1])
     # If we're in minor, shift up to major
     if not mode:
         key = (key + 3) % 12
@@ -134,10 +133,10 @@ def renderMML(A):
     key     = A['track']['key']
     mode    = A['track']['mode']
 
-#     print 'KEY: %s %s' % (PITCHES[int(key)], 'Maj' if mode else 'min'),
+    print 'KEY: %s %s' % (PITCHES[int(key)], 'Maj' if mode else 'min'),
 
     tone_mask = getToneMask(key, mode)
-#     print tone_mask
+    print tone_mask
 
     channel_names = ['A', 'B', 'C', 'D', 'E']
     # Initialize envelopes
@@ -178,7 +177,7 @@ def renderMML(A):
         # Compute duration from segment length
         lengths.append(estimateDuration(median_beat, duration))
     
-#         print '[%.2f/%.2f/%3s] Tones: (%2s,%2s) (%.2f,%.2f,%.2f) ' % (duration, median_beat, lengths[-1], PITCHES[tones[0]], PITCHES[tones[1]], C[tones[0]], C[tones[1]], sum(C))
+        print '[%.2f/%.2f/%3s] Tones: (%2s,%2s) (%.2f,%.2f,%.2f) ' % (duration, median_beat, lengths[-1], PITCHES[tones[0]], PITCHES[tones[1]], C[tones[0]], C[tones[1]], sum(C))
 
         channels[0].append(PITCHES[tones[0]] + lengths[-1])    # A-channel, primary tone
         channels[1].append(PITCHES[tones[1]] + lengths[-1])    # B-channel, secondary tone
