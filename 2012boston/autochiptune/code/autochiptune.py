@@ -11,7 +11,8 @@ import pyechonest
 import pyechonest.song, pyechonest.track
 import pyechonest.config
 
-import heapq
+
+MAX_CHROMA = 128
 
 
 # Step 0: load cfg
@@ -81,6 +82,10 @@ def getTwoLargest(C):
     return (i1, i2)
 
 
+def quantizeVolume(loudness, scale):
+    # Effective loudness range is -70 to -10 dB
+    return int(16.0 * min(50, max(0, (scale * loudness + 60))) / 50.0)
+
 def renderMML(A):
     # Step 2: extract tempo, key info
 
@@ -91,27 +96,35 @@ def renderMML(A):
 
     channel_names = ['A', 'B', 'C', 'D', 'E']
     # Initialize envelopes
-    envelopes       = [ [] ] * len(channel_names)
-    envelopes[0]    = [15]
-    envelopes[1]    = [10]
+    envelopes       = [ ]
+    for i in range(16):
+        envelopes.append([i])
+        pass
 
     # Initialize pulse profiles
-    profiles        = [ [] ] * len(channel_names)
-    profiles[0]     = 'l8 o4 @01 @v0'
-    profiles[1]     = 'l8 o5 @02 @v1'
-    profiles[2]     = 'l8 o3 q7'
+    profiles        = [ ] 
+    profiles.append('l8 o4 @01 @v15')
+    profiles.append('l8 o5 @02 @v10')
+    profiles.append('l8 o3 q6')
 
     # Step 3: extract top two pitches for each chroma (thresholded) (=> A, B)
-    chroma  = [z['pitches'] for z in A['segments']]
+    features    = [(z['pitches'], z['loudness_max']) for z in A['segments']]
     
-    channels = [ [] ] * len(channel_names)
-    for C in chroma[:128]:
+    channels = [ [], [], [] ]
+
+    volumes  = [ [], [] ]
+
+    for (C, L) in features[:MAX_CHROMA]:
         tones = getTwoLargest(C)
 
         print 'Tones: (%2d,%2d) (%.2f,%.2f,%.2f) ' % (tones[0], tones[1], C[tones[0]], C[tones[1]], sum(C))
 
         channels[0].append(PITCHES[tones[0]])    # A-channel, primary tone
         channels[1].append(PITCHES[tones[1]])    # B-channel, secondary tone
+
+        # Estimate and quantize relative volumes for each tone
+        volumes[0].append(quantizeVolume(L, C[tones[0]]))
+        volumes[1].append(quantizeVolume(L, C[tones[1]]))
 
         # Step 4: hallucinate bass line (=> C)
         channels[2].append(PITCHES[tones[0]])    # C-channel, bass-line  (one octave below A)
@@ -123,8 +136,6 @@ def renderMML(A):
     #   look at peakiness of chromagram
     #   flat chroma == drum hit
 
-    # Step 6: render output
-
 
 
     M                   = {}
@@ -132,10 +143,19 @@ def renderMML(A):
     M['tempo']          = BPM
     M['profiles']       = profiles
     M['envelopes']      = envelopes
+    M['volumes']        = volumes
     M['channels']       = channels
     return M
 
 
+def stitch(x,y):
+
+    for (a, b) in zip(x, y):
+        yield a
+        yield b
+    return
+
+# Step 6: render output
 def saveMML(output, M):
 
     with open(output, 'w') as f:
@@ -149,10 +169,20 @@ def saveMML(output, M):
         # Set the tempo
         f.write('\n%s t%d\n\n' % (''.join(M['channel_names']), M['tempo']))
 
-        for (i, (p, s)) in enumerate(zip(M['profiles'], M['channels'])):
+        for (i, (p, s, v)) in enumerate(zip(M['profiles'], M['channels'], M['volumes'])):
             if len(p) == 0:
                 continue
-            f.write('%s %s\n%s %s\n\n' % (M['channel_names'][i], p, M['channel_names'][i], ' '.join(s)))
+
+            cname = M['channel_names'][i]
+
+            if len(v) == 0:
+                # No volume profile (triangle wave)
+                f.write('%s %s\n%s %s\n\n' % (cname, p, cname, ' '.join(s)))
+            else:
+                # We need to alternate volume with notes
+                v = ['@v%d' % x for x in v]
+                shaped = ' '.join([x for x in stitch(v, s)])
+                f.write('%s %s\n %s %s\n\n' % (cname, p, cname, shaped))
             pass
         pass
 
