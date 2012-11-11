@@ -147,8 +147,8 @@ def renderMML(A):
 
     # Initialize pulse profiles
     profiles        = [ ] 
-    profiles.append('l8 o4 @02 @v15')
-    profiles.append('l8 o5 @02 @v10')
+    profiles.append('l8 o4 @00 @v15')
+    profiles.append('l8 o5 @01 @v10')
     profiles.append('l8 o3 q6')
     profiles.append('l8 o0 @0')
 
