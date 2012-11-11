@@ -30,7 +30,9 @@ def loadConfig(serverIni):
         CFG[section] = dict(P.items(section))
         pass
 
-    pyechonest.config.ECHO_NEST_API_KEY = CFG['chipulate']['echonest_api_key']
+    CFG = CFG['chipulate']
+
+    pyechonest.config.ECHO_NEST_API_KEY = CFG['echonest_api_key']
 
     pass
 
@@ -38,7 +40,7 @@ def loadConfig(serverIni):
 # Step 1: get echo nest analysis
 def loadCachedAnalysis(artist=None, title=None):
 
-    CACHE_FILE = CFG['chipulate']['cache_file']
+    CACHE_FILE = CFG['cache_file']
 
     if CACHE_FILE is None or not os.path.exists(CACHE_FILE):
         # Search for the song
@@ -83,18 +85,21 @@ def getTwoLargest(C):
     return (i1, i2)
 
 
-ALPHA   = numpy.array([1.0, 2.0, 4.0, 0.5, 0.25, 3.0])
-LENGTH  = ['8', '16', '32', '4', '2', '8.']
+ALPHA   = numpy.array([1.0, 2.0, 4.0, 0.5, 0.25, 0.66, 1.5, 0.33, 0.167])
+LENGTH  = ['8', '16', '32', '4', '2', '8.', '16.', '4.', '2.']
 def estimateDuration(med, cur):
 
     # score function: log(alpha * cur / med)^2
     # for alpha in:
-    #       1.0     =>  eighth      =>  '8'
-    #       2.0     =>  sixteenth   =>  '16'
-    #       3.0     =>  dotted eight=>  '8.'
-    #       4.0     =>  32nd        =>  '32'
-    #       0.5     =>  quarter     =>  '4'
-    #       0.25    =>  half        =>  '2'
+    #       0.25    =>  half        =>  '2'   (med / 0.25 = med * 4)
+    #       0.5     =>  quarter     =>  '4'   (med / 0.50 = med * 2)
+    #       1.0     =>  eighth      =>  '8'   (med / 1.0  = med * 1.0)
+    #       2.0     =>  sixteenth   =>  '16'  (med / 2.0  = med * 0.5)
+    #       4.0     =>  32nd        =>  '32'  (med / 4.0  = med * 0.25)
+    #       2/3     =>  dotted 8th  =>  '8.'  (med / 0.66 = med * 1.5)
+    #       1.5     =>  dotted 16th =>  '16.' (med / 1.5  = med * 0.75)
+    #       0.33    =>  dotted 4th  =>  '4.'  (med / 0.33 = med * 3.00)
+    #       0.167   =>  dotted half =>  '2.'  (med / 0.167= med * 6.00)
 
     global ALPHA
     global LENGTH
@@ -126,8 +131,8 @@ def renderMML(A):
     # Initialize pulse profiles
     profiles        = [ ] 
     profiles.append('l8 o4 @01 @v15')
-    profiles.append('l8 o4 @02 @v10')
-    profiles.append('l8 o3 q5')
+    profiles.append('l8 o4 @01 @v10')
+    profiles.append('l8 o3 q6')
 
     # Step 3: extract top two pitches for each chroma (thresholded) (=> A, B)
     features    = [(z['pitches'], z['loudness_max'], z['duration']) for z in A['segments']]
@@ -154,20 +159,25 @@ def renderMML(A):
         volumes[0].append(quantizeVolume(loudness, C[tones[0]]))
         volumes[1].append(quantizeVolume(loudness, C[tones[1]]))
 
-        if C[tones[1]] < 0.5:
+        if C[tones[1]] < CFG['chord_energy_threshold']:
             volumes[1][-1] = 0
             pass
 
         # Step 4: hallucinate the bass line (=> C)
         channels[2].append(PITCHES[tones[0]] + lengths[-1])    # C-channel, bass-line  (one octave below A)
         
+        # Step 5: detect/make up drum pulses (=> D)
+        #   look at peakiness of chromagram
+        #   flat chroma == drum hit
+        if sum(C) >= CFG['percussion_threshold']:
+            #we're a drum hit
+            # activate the noise
+            # otherwise, rest
+            pass
+        else:
+            pass
+
         pass
-
-
-    # Step 5: detect/make up drum pulses (=> D)
-    #   look at peakiness of chromagram
-    #   flat chroma == drum hit
-
 
 
     M                   = {}
