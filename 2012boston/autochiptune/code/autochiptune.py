@@ -40,7 +40,7 @@ def loadCachedAnalysis(artist=None, title=None):
 
     CACHE_FILE = CFG['cache_file']
 
-    if CACHE_FILE is None or not os.path.exists(CACHE_FILE):
+    if len(CACHE_FILE) == 0 or not os.path.exists(CACHE_FILE):
         # Search for the song
         S = pyechonest.song.search(artist=artist, title=title, results=1, buckets=['audio_summary'])
 
@@ -52,7 +52,7 @@ def loadCachedAnalysis(artist=None, title=None):
         f = urllib2.urlopen(S.audio_summary['analysis_url'])
         A = json.loads(f.read())
 
-        if CACHE_FILE is not None:
+        if len(CACHE_FILE) > 0:
             with open(CACHE_FILE, 'w') as f:
                 pickle.dump(A, f)
                 pass
@@ -134,9 +134,10 @@ def renderMML(A):
     key     = A['track']['key']
     mode    = A['track']['mode']
 
-    print 'KEY: %s %s' % (PITCHES[int(key)], 'Maj' if mode else 'min')
+    print 'KEY: %s %s' % (PITCHES[int(key)], 'Maj' if mode else 'min'),
 
     tone_mask = getToneMask(key, mode)
+    print tone_mask
 
     channel_names = ['A', 'B', 'C', 'D', 'E']
     # Initialize envelopes
@@ -147,10 +148,10 @@ def renderMML(A):
 
     # Initialize pulse profiles
     profiles        = [ ] 
-    profiles.append('l8 o3 @01 @v15')
+    profiles.append('l8 o4 @01 @v15')
     profiles.append('l8 o4 @01 @v10')
-    profiles.append('l8 o2 q6')
-    profiles.append('l8 o1 @0')
+    profiles.append('l8 o3 q6')
+    profiles.append('l8 o0 @0')
 
     # Step 3: extract top two pitches for each chroma (thresholded) (=> A, B)
     features    = [(z['pitches'], z['loudness_max'], z['duration']) for z in A['segments']]
@@ -178,7 +179,7 @@ def renderMML(A):
         volumes[0].append(quantizeVolume(loudness, C[tones[0]]))
         volumes[1].append(quantizeVolume(loudness, C[tones[1]]))
 
-        if C[tones[1]] < CFG['chord_energy_threshold']:
+        if C[tones[1]] < CFG['chord_energy_threshold'] * C[tones[0]]:
             volumes[1][-1] = 0
             pass
 
