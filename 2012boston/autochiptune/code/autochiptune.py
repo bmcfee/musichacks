@@ -165,7 +165,7 @@ def renderMML(A):
 
     lengths = []
 
-    for (C, loudness, duration) in features[:int(CFG['max_frames'])]:
+    for (C, loudness, duration) in features[:min(len(features), int(CFG['max_frames']))]:
         # Does chroma energy exceed the threshold for percussion?
         PERCUSSION = sum(C) >= float(CFG['percussion_threshold'])
 
@@ -267,7 +267,7 @@ def saveMML(output, M):
     pass
 
 if __name__ == '__main__':
-    loadConfig('en.ini')
+    loadConfig('autochiptune.ini')
     print 'Requesting analysis for ', sys.argv[2:], '...'
     A = loadCachedAnalysis(artist=sys.argv[2], title=sys.argv[3])
     print 'Generating MML...'

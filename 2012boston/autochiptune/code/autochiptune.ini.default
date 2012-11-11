@@ -1,0 +1,8 @@
+[chipulate]
+echonest_api_key=
+cache_file=analysis.cache
+chord_energy_threshold=0.2
+percussion_threshold=6.0
+max_frames=20
+mode_weight=0.2
+
