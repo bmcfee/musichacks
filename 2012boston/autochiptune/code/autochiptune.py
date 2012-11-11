@@ -13,8 +13,6 @@ import pyechonest.config
 
 import numpy
 
-MAX_CHROMA = 256
-
 
 # Step 0: load cfg
 CFG = {}
@@ -133,20 +131,21 @@ def renderMML(A):
     profiles.append('l8 o4 @01 @v15')
     profiles.append('l8 o4 @01 @v10')
     profiles.append('l8 o3 q6')
+    profiles.append('l8 o1 @0')
 
     # Step 3: extract top two pitches for each chroma (thresholded) (=> A, B)
     features    = [(z['pitches'], z['loudness_max'], z['duration']) for z in A['segments']]
     
-    channels = [ [], [], [] ]
+    channels = [ [], [], [], [] ]
 
-    volumes  = [ [], [] ]
+    volumes  = [ [], [], [], [] ]
 
     # Compute median beat duration
     median_beat = numpy.median([x[2] for x in features])
 
     lengths = []
 
-    for (C, loudness, duration) in features[:MAX_CHROMA]:
+    for (C, loudness, duration) in features[:int(CFG['max_frames'])]:
         tones   = getTwoLargest(C)
         lengths.append(estimateDuration(median_beat, duration))
     
@@ -164,17 +163,23 @@ def renderMML(A):
             pass
 
         # Step 4: hallucinate the bass line (=> C)
-        channels[2].append(PITCHES[tones[0]] + lengths[-1])    # C-channel, bass-line  (one octave below A)
+        channels[2].append(PITCHES[tones[0]])# + lengths[-1])    # C-channel, bass-line  (one octave below A)
         
         # Step 5: detect/make up drum pulses (=> D)
         #   look at peakiness of chromagram
         #   flat chroma == drum hit
-        if sum(C) >= CFG['percussion_threshold']:
+        if sum(C) >= float(CFG['percussion_threshold']):
             #we're a drum hit
-            # activate the noise
-            # otherwise, rest
+            # activate the noise and suppress the notes
+#             volumes[0][-1] = 0
+            volumes[1][-1] = 0
+            channels[3].append(PITCHES[0])
+            volumes[3].append(quantizeVolume(loudness, 1.0))
             pass
         else:
+            # otherwise, rest the noise channel
+            channels[3].append('r' + lengths[-1])
+            volumes[3].append(0)
             pass
 
         pass
