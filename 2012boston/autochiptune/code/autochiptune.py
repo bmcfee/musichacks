@@ -11,8 +11,9 @@ import pyechonest
 import pyechonest.song, pyechonest.track
 import pyechonest.config
 
+import numpy
 
-MAX_CHROMA = 128
+MAX_CHROMA = 256
 
 
 # Step 0: load cfg
@@ -82,6 +83,26 @@ def getTwoLargest(C):
     return (i1, i2)
 
 
+ALPHA   = numpy.array([1.0, 2.0, 4.0, 0.5, 0.25, 3.0])
+LENGTH  = ['8', '16', '32', '4', '2', '8.']
+def estimateDuration(med, cur):
+
+    # score function: log(alpha * cur / med)^2
+    # for alpha in:
+    #       1.0     =>  eighth      =>  '8'
+    #       2.0     =>  sixteenth   =>  '16'
+    #       3.0     =>  dotted eight=>  '8.'
+    #       4.0     =>  32nd        =>  '32'
+    #       0.5     =>  quarter     =>  '4'
+    #       0.25    =>  half        =>  '2'
+
+    global ALPHA
+    global LENGTH
+
+    i = numpy.argmin(numpy.log(ALPHA * cur / med)**2)
+    
+    return LENGTH[i]
+
 def quantizeVolume(loudness, scale):
     # Effective loudness range is -70 to -10 dB
     return int(16.0 * min(50, max(0, (scale * loudness + 60))) / 50.0)
@@ -94,6 +115,7 @@ def renderMML(A):
     key     = A['track']['key']
     mode    = A['track']['mode']
 
+
     channel_names = ['A', 'B', 'C', 'D', 'E']
     # Initialize envelopes
     envelopes       = [ ]
@@ -104,30 +126,40 @@ def renderMML(A):
     # Initialize pulse profiles
     profiles        = [ ] 
     profiles.append('l8 o4 @01 @v15')
-    profiles.append('l8 o5 @02 @v10')
-    profiles.append('l8 o3 q6')
+    profiles.append('l8 o4 @02 @v10')
+    profiles.append('l8 o3 q5')
 
     # Step 3: extract top two pitches for each chroma (thresholded) (=> A, B)
-    features    = [(z['pitches'], z['loudness_max']) for z in A['segments']]
+    features    = [(z['pitches'], z['loudness_max'], z['duration']) for z in A['segments']]
     
     channels = [ [], [], [] ]
 
     volumes  = [ [], [] ]
 
-    for (C, L) in features[:MAX_CHROMA]:
-        tones = getTwoLargest(C)
+    # Compute median beat duration
+    median_beat = numpy.median([x[2] for x in features])
 
-        print 'Tones: (%2d,%2d) (%.2f,%.2f,%.2f) ' % (tones[0], tones[1], C[tones[0]], C[tones[1]], sum(C))
+    lengths = []
 
-        channels[0].append(PITCHES[tones[0]])    # A-channel, primary tone
-        channels[1].append(PITCHES[tones[1]])    # B-channel, secondary tone
+    for (C, loudness, duration) in features[:MAX_CHROMA]:
+        tones   = getTwoLargest(C)
+        lengths.append(estimateDuration(median_beat, duration))
+    
+        print '[%.2f/%.2f/%3s] Tones: (%2s,%2s) (%.2f,%.2f,%.2f) ' % (duration, median_beat, lengths[-1], PITCHES[tones[0]], PITCHES[tones[1]], C[tones[0]], C[tones[1]], sum(C))
+
+        channels[0].append(PITCHES[tones[0]] + lengths[-1])    # A-channel, primary tone
+        channels[1].append(PITCHES[tones[1]] + lengths[-1])    # B-channel, secondary tone
 
         # Estimate and quantize relative volumes for each tone
-        volumes[0].append(quantizeVolume(L, C[tones[0]]))
-        volumes[1].append(quantizeVolume(L, C[tones[1]]))
+        volumes[0].append(quantizeVolume(loudness, C[tones[0]]))
+        volumes[1].append(quantizeVolume(loudness, C[tones[1]]))
 
-        # Step 4: hallucinate bass line (=> C)
-        channels[2].append(PITCHES[tones[0]])    # C-channel, bass-line  (one octave below A)
+        if C[tones[1]] < 0.5:
+            volumes[1][-1] = 0
+            pass
+
+        # Step 4: hallucinate the bass line (=> C)
+        channels[2].append(PITCHES[tones[0]] + lengths[-1])    # C-channel, bass-line  (one octave below A)
         
         pass
 
@@ -145,6 +177,7 @@ def renderMML(A):
     M['envelopes']      = envelopes
     M['volumes']        = volumes
     M['channels']       = channels
+    M['lengths']        = lengths
     return M
 
 
@@ -170,6 +203,7 @@ def saveMML(output, M):
         f.write('\n%s t%d\n\n' % (''.join(M['channel_names']), M['tempo']))
 
         for (i, (p, s, v)) in enumerate(zip(M['profiles'], M['channels'], M['volumes'])):
+
             if len(p) == 0:
                 continue
 

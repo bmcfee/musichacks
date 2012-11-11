@@ -17,6 +17,3 @@ Moar crazy ideas:
 
     Use danceability measure to adapt the drum hits and quantization on C channel
 
-    Use loudness_max to suppress gibberish
-
-    Use relative pitch intensity to scale A channel, B channel
