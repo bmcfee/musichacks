@@ -110,6 +110,22 @@ def quantizeVolume(loudness, scale):
     # Effective loudness range is -70 to -10 dB
     return int(16.0 * min(50, max(0, (scale * loudness + 60))) / 50.0)
 
+
+def getToneMask(key, mode):
+    key = int(key)
+                                                    #C C# D  D# E  F  F#  G G# A  A# B
+    T = 1 - (1 - float(CFG['mode_weight'])) * numpy.array([1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1])
+    T = (1 + float(CFG['mode_weight'])) - T
+
+    # If we're in minor, shift up to major
+    if not mode:
+        key = (key + 3) % 12
+        pass
+
+    # now we're in major, shift the C-major scale by key
+    
+    return numpy.roll(T, key)
+
 def renderMML(A):
     # Step 2: extract tempo, key info
 
@@ -118,6 +134,9 @@ def renderMML(A):
     key     = A['track']['key']
     mode    = A['track']['mode']
 
+    print 'KEY: %s %s' % (PITCHES[int(key)], 'Maj' if mode else 'min')
+
+    tone_mask = getToneMask(key, mode)
 
     channel_names = ['A', 'B', 'C', 'D', 'E']
     # Initialize envelopes
@@ -128,9 +147,9 @@ def renderMML(A):
 
     # Initialize pulse profiles
     profiles        = [ ] 
-    profiles.append('l8 o4 @01 @v15')
+    profiles.append('l8 o3 @01 @v15')
     profiles.append('l8 o4 @01 @v10')
-    profiles.append('l8 o3 q6')
+    profiles.append('l8 o2 q6')
     profiles.append('l8 o1 @0')
 
     # Step 3: extract top two pitches for each chroma (thresholded) (=> A, B)
@@ -146,6 +165,7 @@ def renderMML(A):
     lengths = []
 
     for (C, loudness, duration) in features[:int(CFG['max_frames'])]:
+        C = tone_mask * C
         tones   = getTwoLargest(C)
         lengths.append(estimateDuration(median_beat, duration))
     
@@ -168,7 +188,7 @@ def renderMML(A):
         # Step 5: detect/make up drum pulses (=> D)
         #   look at peakiness of chromagram
         #   flat chroma == drum hit
-        if sum(C) >= float(CFG['percussion_threshold']):
+        if sum(C) >= float(CFG['mode_weight']) * float(CFG['percussion_threshold']):
             #we're a drum hit
             # activate the noise and suppress the notes
 #             volumes[0][-1] = 0
@@ -178,7 +198,7 @@ def renderMML(A):
             pass
         else:
             # otherwise, rest the noise channel
-            channels[3].append('r' + lengths[-1])
+            channels[3].append('r')
             volumes[3].append(0)
             pass
 
