@@ -28,7 +28,7 @@ def loadConfig(serverIni):
         CFG[section] = dict(P.items(section))
         pass
 
-    CFG = CFG['chipulate']
+    CFG = CFG['autochiptune']
 
     pyechonest.config.ECHO_NEST_API_KEY = CFG['echonest_api_key']
 
@@ -107,8 +107,11 @@ def estimateDuration(med, cur):
     return LENGTH[i]
 
 def quantizeVolume(loudness, scale):
-    # Effective loudness range is -70 to -10 dB
-    return int(16.0 * min(50, max(0, (scale * loudness + 60))) / 50.0)
+    # Effective loudness range
+    MIN_DB = -90
+    MAX_DB = -30
+
+    return int(16.0 * min(MAX_DB - MIN_DB, max(0, (scale * loudness - MIN_DB))) / (MAX_DB - MIN_DB))
 
 
 def getToneMask(key, mode):
@@ -181,6 +184,8 @@ def renderMML(A):
 
         channels[0].append(PITCHES[tones[0]] + lengths[-1])    # A-channel, primary tone
         channels[1].append(PITCHES[tones[1]] + lengths[-1])    # B-channel, secondary tone
+        # Step 4: hallucinate the bass line (=> C)
+        channels[2].append(PITCHES[tones[0]] + lengths[-1])    # C-channel, bass-line  (one octave below A)
 
         # Estimate and quantize relative volumes for each tone
         volumes[0].append(quantizeVolume(loudness, C[tones[0]]))
@@ -190,8 +195,6 @@ def renderMML(A):
             volumes[1][-1] = 0
             pass
 
-        # Step 4: hallucinate the bass line (=> C)
-        channels[2].append(PITCHES[tones[0]])# + lengths[-1])    # C-channel, bass-line  (one octave below A)
         
         # Step 5: detect/make up drum pulses (=> D)
         #   look at peakiness of chromagram
@@ -199,14 +202,14 @@ def renderMML(A):
         if PERCUSSION:
             #we're a drum hit
             # activate the noise and suppress the notes
-#             volumes[0][-1] = 0
+            volumes[0][-1] /= 2
             volumes[1][-1] = 0
-            channels[3].append(PITCHES[0])
+            channels[3].append(PITCHES[-1])
             volumes[3].append(quantizeVolume(loudness, 1.0))
             pass
         else:
             # otherwise, rest the noise channel
-            channels[3].append('r')
+            channels[3].append('r' + lengths[-1])
             volumes[3].append(0)
             pass
 

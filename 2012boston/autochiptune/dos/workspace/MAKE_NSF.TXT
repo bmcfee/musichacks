@@ -10,13 +10,13 @@
 	dw	INIT		;Init
 	dw	PLAY		;Play
   .org	$800E
-	db	"Auto-generated song name"
+	db	"They Might Be Giants - Istanbul"
 	db	$00
   .org	$802E
 	db	"functiontelechy"
 	db	$00
   .org	$804E
-	db	"Chipulate"
+	db	"AutoChipTune"
 	db	$00
   .org	$806E
 	dw	16666		;1000000 / (freq of NTSC) sec
