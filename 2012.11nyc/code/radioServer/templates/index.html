@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Radio</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+        <link   rel     ="stylesheet"
+                href    ="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-darkness/jquery-ui.css"
+                type    ="text/css"
+                media   ="all"
+        />
+
+        <link   href='http://fonts.googleapis.com/css?family=Cabin:400,700,400italic' 
+                rel='stylesheet' 
+                type='text/css'
+        />
+
+        <link   rel     ="stylesheet"radiohead airba
+                href    ="/static/css/radio.css"
+                type    ="text/css"
+                media   ="all"
+        />
+
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script> 
+        <script type="text/javascript"> google.load("swfobject", "2.2");    </script>
+        <script type="text/javascript"> google.load("jquery", "1.7");     </script>
+        <script type="text/javascript"> google.load("jqueryui", "1.8");  </script> 
+
+        <script type="text/javascript" src="/static/js/radio.js"></script>
+        <script type="text/javascript" src="/static/js/ui.js"></script>
+        <script type="text/javascript" src="/static/js/jquery.scrollTo-1.4.2-min.js"></script>
+	</head>
+
+    <body>
+        <div id="searchbox">
+            <label for="search">Search</label>
+            <input id="search" style="width: 320px; margin-right: 8pt;"/>
+        </div>
+            
+        <div id="main">
+
+            <div style="width: 400px; padding: 8pt">
+                <div id="album-art">
+                    <img id="album-art-img" src="/static/i/logo.png" alt="" style="height:400px;"/>
+                </div>
+
+                <div id="toolbar" class="ui-widget-header ui-corner-all">
+                    <button id="volume">    Mute        </button>
+                    <button id="playpause"> Play/pause  </button>
+                </div>
+
+                <div id="metadata">
+                    <div id="artist-name" class="artistName"></div>
+                    <div id="song-title"  class="songTitle"></div>
+                    <div id="album-title" class="albumTitle"></div>
+                </div>
+            
+                <div    class="ui-progressbar ui-widget ui-widget-content ui-corner-all" 
+                        style="width: 100%; height:10px;">
+                    <div    id      ="trackprogress" class   ="ui-progressbar-value"></div>
+                </div>
+
+                <div id="player"></div>
+            </div>
+        </div>
+    </body>
+</html>
