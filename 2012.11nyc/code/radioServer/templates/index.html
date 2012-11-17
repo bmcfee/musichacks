@@ -39,16 +39,21 @@
             
         <div id="main">
 
-            <div style="width: 400px; padding: 8pt; align: center">
-                <div id="album-art">
-                    <img id="album-art-img" src="/static/i/logo.png" alt="" style="height:400px;"/>
-                </div>
+            <div id="emotion-art" style="float:right; padding: 32pt; width:280px;">
+                <img id="emotion-art-img" src="/static/i/faces/neutral/1.png" style="height:320px;"/>
+                <div id="lyrics" style="font-size: 24pt;"></div>
+            </div>
 
+
+            <div style="width: 400px; padding: 8pt; align: center">
                 <div id="toolbar" class="ui-widget-header ui-corner-all">
                     <button id="volume">    Mute        </button>
                     <button id="playpause"> Play/pause  </button>
                 </div>
 
+                <div id="album-art">
+                    <img id="album-art-img" src="/static/i/logo.png" alt="" style="height:400px;"/>
+                </div>
                 <div id="metadata">
                     <div id="artist-name" class="artistName"></div>
                     <div id="song-title"  class="songTitle"></div>

@@ -5,6 +5,9 @@ var volumeOn        = true;
 
 var sliding         = false;
 
+var imageList       = ['neutral/1.png'];
+var lyrics          = [''];
+
 // Handle keyboard events
 $(document).keydown(function (e) {
     if ($("#search").is(":focus")) {
@@ -67,6 +70,7 @@ $(function() {
             select: function( event, ui ) {
                 if (ui.item) {
                     loadSong(ui.item);
+                    loadImages(ui.item.musixmatch_id)
                     $("#search").blur();
                 }
                 console.log( ui.item ?
@@ -84,6 +88,18 @@ $(function() {
     initRdioPlayer();
 });
 
+function loadImages(mm_id) {
+    imageList   = ['neutral/1.png'];
+    lyrics      = [''];
+    $.getJSON(
+        '/emotionprofile',
+        {track_id: mm_id},
+        function (data) {
+            imageList   = data.images;
+            lyrics      = data.lyrics;
+            console.log(imageList)
+        });
+}
 
 function notify(message) {
     var D = $('<div style="text-align: center;"></div>');
@@ -96,4 +112,19 @@ function notify(message) {
     D.delay(1000).queue(function() {
         D.dialog("close");
     });
+}
+
+function getImagelist() {
+    return imageList;
+}
+function getLyrics() {
+    return lyrics;
+}
+
+function updateFace(img) {
+    $( "#emotion-art-img" ).attr('src', '/static/i/faces/' + img);
+}
+
+function updateLyrics(txt) {
+    $( "#lyrics" ).text(txt);
 }

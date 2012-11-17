@@ -118,9 +118,16 @@ radioListener.positionChanged = function(position) {
     //  The position within the track changed to position seconds. 
     //  This happens both in response to a seek and during playback.
 
-//     if (! sliding) {
-//         $("#trackprogress").slider({value: Math.round(position * 100 / trackDuration)});
-//     }
+    console.log('Time: ' + Math.round(position * 100 / trackDuration) + ' [' + position + ']');
+
+    I = getImagelist();
+    L = getLyrics();
+
+    percentage      = position / trackDuration;
+    currentImage    = Math.round(percentage * I.length);
+
+    updateFace(I[currentImage]);
+    updateLyrics(L[currentImage]);
 }
 
 radioListener.queueChanged = function(newQueue) {
