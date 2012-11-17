@@ -30,10 +30,6 @@ function resetPlayer() {
 
     $("#playpause") .button("option", "disabled", true);
 
-    $("#trackprogress")
-        .slider("option", "disabled", true)
-        .slider("option", "value", 0);
-
 }
 
 function resetPlayerDisplay() {
@@ -46,14 +42,6 @@ function resetPlayerDisplay() {
     });
 }
 
-function seekTrack() {
-    var progress = $("#trackprogress");
-    if (player != null) {
-        offset = Math.round(progress.slider("option", "value") * trackDuration / 100);
-        player.rdio_seek(offset);
-        progress.blur();
-    }
-}
 
 function setMute(volume) {
     if (player != null) {
@@ -86,10 +74,6 @@ radioListener.playStateChanged = function(playState) {
         $( "#playpause" ).button("option", "icons", {primary: 'ui-icon-play'});
     }
 
-    if (playState != 2) {
-        $("#trackprogress").slider("option", "disabled", false);
-    }
-
 }
 
 
@@ -97,15 +81,6 @@ radioListener.playingTrackChanged = function(playingTrack, sourcePosition) {
     //  The currently playing track has changed. 
     //  Track metadata is provided as playingTrack and the position within the playing source as sourcePosition.
 
-    if (playingTrack == null) {
-        // we're all out of tracks
-        resetPlayerDisplay();
-        
-        return;
-    } else if ( $("li.playing").next().length == 0 ) {
-        // we're on the last track, but in radio mode.. add another
-        expandPlaylist();
-    }
     console.log('Playing: ' + playingTrack.artist + ' - ' + playingTrack.name );
 
     trackDuration = playingTrack.duration;
@@ -143,9 +118,9 @@ radioListener.positionChanged = function(position) {
     //  The position within the track changed to position seconds. 
     //  This happens both in response to a seek and during playback.
 
-    if (! sliding) {
-        $("#trackprogress").slider({value: Math.round(position * 100 / trackDuration)});
-    }
+//     if (! sliding) {
+//         $("#trackprogress").slider({value: Math.round(position * 100 / trackDuration)});
+//     }
 }
 
 radioListener.queueChanged = function(newQueue) {

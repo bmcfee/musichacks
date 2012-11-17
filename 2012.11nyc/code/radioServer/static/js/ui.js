@@ -41,15 +41,6 @@ function toggleVolume(buttonNode) {
 
 // Initialize control widgets and start the player
 $(function() {
-    $( "#trackprogress" )
-        .slider({   slide:      seekTrack, 
-                    animate:    false, 
-                    disabled:   true, 
-                    range:      "min", 
-                    start:      function() { sliding = true; },
-                    stop:       function() { sliding = false;},
-        });
-
     $( "#playpause" )
         .button({ text: false, icons: { primary: "ui-icon-play" }, disabled: true })
         .click(playPauseMusic);
