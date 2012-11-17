@@ -1,12 +1,12 @@
 body, html { 
-    font-family:        'Cabin', helvetica, verdana, sans-serif; 
+    font-family:        'Coming Soon', cursive; 
     font-size:          10pt;
     height:             100%;
     overflow:           hidden;
 }
 
 body {
-    background-color:   black;
+    background-color:   white;
     margin:             0px;
     padding:            0px;
 }
@@ -39,8 +39,8 @@ body {
 
 #main {
     height:             100%; 
-    background-color:   #2e3436;
-    color:              #eeeeec;
+    color:              black;
+    background-color:   white;
 }
 
 #searchbox {
@@ -57,53 +57,6 @@ body {
     padding: 4px;
 }
 
-#playlistWidget {
-    width:              100%;
-    height:             75%;
-    overflow-x:         hidden;
-    overflow-y:         auto;
-    margin:             0px;
-    text-align:         left;
-    border:             1px solid black;
-}
-
-ul.playlist {
-    list-style-type:    none;
-    padding:            0;
-    margin:             0;
-}
-
-li.playlist, li.played, li.playing {
-    margin:             0;
-    padding:            4px;
-    border-top:         1px solid black;
-}
-li.playlist {
-    background-color:   #75507b;
-/*     background-color:   #5c3566; */
-}
-
-li.playlist:nth-child(1), li.played:nth-child(1) {
-    border-top:     0px;
-}
-
-li.playlist:nth-child(even), li.played:nth-child(even) {
-/*     background-color:   #ad7fa8; */
-    background-color:   #555753;
-}
-
-li.played {
-    color:              #707070;
-}
-
-li.playing {
-    background-color:   #ad7fa8;
-    color:              #eeeeec;
-}
-
-img.playlist {
-    display: none;
-}
 img.playing {
 }
 
@@ -142,29 +95,6 @@ img.playing {
 a:link{
     color:      #729fcf;
     font-weight: bold;
-}
-
-#howto {
-    vertical-align: center;
-    text-align:     center;
-    height: 100%;
-    padding-top: 20%;
-    font-size:  14pt;
-}
-
-
-#activetags {
-    min-height:             8em;
-    overflow-x:             hidden;
-    overflow-y:             auto;
-}
-
-#tag-dialog {
-    text-align:             center;
-}
-
-#tagsearch {
-    width: 100%;
 }
 
 a.artist-tag:hover {
