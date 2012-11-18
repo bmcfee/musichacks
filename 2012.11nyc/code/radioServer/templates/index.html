@@ -34,19 +34,19 @@
     <body>
         <div id="searchbox">
             <label for="search">Search</label>
-            <input id="search" style="width: 320px; margin-right: 8pt;"/>
+            <input id="search" style="width: 600px; margin-right: 8pt;"/>
         </div>
             
         <div id="main">
 
-            <div id="emotion-art" style="float:right; padding: 32pt; width:280px;">
+            <div id="emotion-art" style="float:right; padding: 32pt; padding-right:80px; width:280px;">
                 <img id="emotion-art-img" src="/static/i/faces/neutral/1.png" style="height:320px;"/>
                 <div id="lyrics" style="font-size: 24pt;"></div>
             </div>
 
 
             <div style="width: 400px; padding: 8pt; align: center">
-                <div id="toolbar" class="ui-widget-header ui-corner-all">
+                <div id="toolbar" class="ui-widget-header ui-corner-all" style="font-size: 12pt;">
                     <button id="volume">    Mute        </button>
                     <button id="playpause"> Play/pause  </button>
                 </div>
@@ -60,6 +60,13 @@
                     <div id="album-title" class="albumTitle"></div>
                 </div>
             
+        <div style="flush: right;">
+            <!-- logo bar -->
+            <img src="/static/i/logos/en.gif" style="height: 22px;" />
+            <img src="/static/i/logos/rdio.png" style="height: 22px;" />
+            <img src="/static/i/logos/mmatch.png" style="height: 22px;"/>
+            <img src="/static/i/logos/mmetric.png" style="height: 22px;"/>
+        </div>
                 <div id="player"></div>
             </div>
         </div>

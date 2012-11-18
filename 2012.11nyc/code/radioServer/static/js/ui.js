@@ -69,8 +69,7 @@ $(function() {
             minLength: 3,       // don't search if the length is less than 2 characters
             select: function( event, ui ) {
                 if (ui.item) {
-                    loadSong(ui.item);
-                    loadImages(ui.item.musixmatch_id)
+                    loadImages(ui.item, ui.item.musixmatch_id)
                     $("#search").blur();
                 }
                 console.log( ui.item ?
@@ -88,7 +87,7 @@ $(function() {
     initRdioPlayer();
 });
 
-function loadImages(mm_id) {
+function loadImages(rdio_id, mm_id) {
     imageList   = ['neutral/1.png'];
     lyrics      = [''];
     $.getJSON(
@@ -98,6 +97,7 @@ function loadImages(mm_id) {
             imageList   = data.images;
             lyrics      = data.lyrics;
             console.log(imageList)
+            loadSong(rdio_id);
         });
 }
 

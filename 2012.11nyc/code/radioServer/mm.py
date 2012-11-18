@@ -26,8 +26,12 @@ class mm(object):
             A           = json.loads(f.read())
 
             lyrics      = A['message']['body']['lyrics']['lyrics_body']
-            lines       = map(lambda x: x.upper(), filter(lambda x: len(x) > 0, lyrics.split('\n')))
+            if len(lyrics) == 0:
+                raise Exception('')
+
+            lines       = filter(lambda x: len(x) > 0, lyrics.split('\n'))
             sentiment   = map(self.analyzeSentiment, lines)
+            pprint.pprint(zip(lines, sentiment))
             # Classify sentiment
             images      = map(self.classifySentiment, sentiment)
         except:
