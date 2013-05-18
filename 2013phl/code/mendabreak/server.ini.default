@@ -1,0 +1,10 @@
+[server]
+root=.
+static=static
+debug=True
+D_lo=/PATH/TO/data/basis_1024.npy
+D_hi=/PATH/TO/data/basis_22050.npy
+
+[soundcloud]
+client_id=
+client_secret=
