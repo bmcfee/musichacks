@@ -155,9 +155,9 @@ def activation_upsample(A_low, sr):
     for i in range(n):
         for j in range(k):
             act_res = librosa.resample(A_low[i,j,:,:].squeeze(), orig_sr=sr_old, target_sr=sr)
+            
             # Local-max filter act_res
-            act_res = librosa.localmax(act_res) * act_res
-            A[i,j,:,:min(sr, len(act_res))] = act_res
+            A[i,j,:,:min(sr, len(act_res))] = librosa.localmax(act_res) * act_res
             
             
     return A
@@ -191,7 +191,7 @@ D_low   = D_low.reshape( (D_low.shape[0], 1, -1) ).astype(np.float32)
 D_high  = np.load('/home/bmcfee/git/musichacks/2013phl/data/basis_22050.npy')
 D_high  = D_high.reshape( (D_high.shape[0], 1, -1) ).astype(np.float32)
 
-Encoder = CDL.ConvolutionalDictionaryLearning(n_atoms=D_low.shape[0], n_iter=0, alpha=0.5)
+Encoder = CDL.ConvolutionalDictionaryLearning(n_atoms=D_low.shape[0], n_iter=0, alpha=0.75)
 Encoder.fit(np.ones( (1, 1, D_low.shape[2]) ) )
 Encoder.set_codebook(D_low)
 
