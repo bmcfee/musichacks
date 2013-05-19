@@ -158,4 +158,6 @@ def process_audio(cfg, files, breakiness):
     # Delete the wavfile
     os.unlink(tmp_out)
 
+    # Push the mp3 to soundcloud
+
     return

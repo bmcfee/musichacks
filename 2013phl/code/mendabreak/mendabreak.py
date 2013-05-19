@@ -4,6 +4,8 @@ import flask
 import ConfigParser
 import sys
 
+import soundcloud
+
 import mangler
 
 # construct application object
@@ -27,11 +29,34 @@ def loadConfig(server_ini):
 def run(**kwargs):
     app.run(**kwargs)
 
-@app.route('/')
+@app.before_request
+def before_request():
+
+    # Refresh the soundcloud client object
+    flask.g.client = soundcloud.Client( client_id=CFG['soundcloud']['client_id'],
+                                        client_secret=CFG['soundcloud']['client_secret'],
+                                        redirect_uri='http://localhost:5000/')
+    # load/construct the session object
+
+    pass
+
+
+@app.route('/', methods=['GET'])
 def index():
     '''Top-level web page'''
 
-    return flask.render_template('index.html')
+    if 'access_token' in flask.request.cookies:
+        access_token = flask.request.cookies['access_token']
+    # exchange authorization code for access token
+    elif 'code' in flask.request.args:
+        code = flask.request.args['code']
+        access_token = flask.g.client.exchange_token(code)
+    else:
+        return flask.redirect(flask.g.client.authorize_url())
+
+    response = flask.make_response(flask.render_template('index.html'))
+    response.set_cookie('access_token', access_token)
+    return response
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -48,7 +73,7 @@ def upload():
 # Main block
 if __name__ == '__main__':
     print 'loading ', sys.argv[1]
-    loadConfig(sys.argv[1])
+    CFG = loadConfig(sys.argv[1])
     run(debug=True)
 #     run(host='0.0.0.0')
 
