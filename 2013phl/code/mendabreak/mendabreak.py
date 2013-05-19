@@ -8,8 +8,12 @@ import soundcloud
 
 import mangler
 
+DEBUG = True
+SECRET_KEY = 'yodawg'
+
 # construct application object
 app = flask.Flask(__name__)
+app.config.from_object(__name__)
 
 def loadConfig(server_ini):
     P       = ConfigParser.RawConfigParser()
@@ -27,53 +31,52 @@ def loadConfig(server_ini):
 
 
 def run(**kwargs):
+    print app.config
     app.run(**kwargs)
 
 @app.before_request
 def before_request():
-
     # Refresh the soundcloud client object
     flask.g.client = soundcloud.Client( client_id=CFG['soundcloud']['client_id'],
                                         client_secret=CFG['soundcloud']['client_secret'],
-                                        redirect_uri='http://localhost:5000/')
-    # load/construct the session object
-
-    pass
+                                        redirect_uri=CFG['soundcloud']['redirect_uri'])
 
 
 @app.route('/', methods=['GET'])
 def index():
     '''Top-level web page'''
 
-    if 'access_token' in flask.request.cookies:
-        access_token = flask.request.cookies['access_token']
-    # exchange authorization code for access token
-    elif 'code' in flask.request.args:
+    if 'code' in flask.request.args:
         code = flask.request.args['code']
-        access_token = flask.g.client.exchange_token(code)
-    else:
+        flask.session['code']         = code
+        flask.session['access_token'] = flask.g.client.exchange_token(code)
+
+    if 'access_token' not in flask.session:
         return flask.redirect(flask.g.client.authorize_url())
 
-    response = flask.make_response(flask.render_template('index.html'))
-    response.set_cookie('access_token', access_token)
-    return response
+    print flask.session['access_token'].keys()
+    return flask.make_response(flask.render_template('index.html'))
 
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     '''upload handler'''
 
-    mangler.process_audio(  app.config, 
-                            flask.request.files, 
-                            float(flask.request.form['breakiness']))
-    return 'wat'
-
-
+    try:
+        client = soundcloud.Client(access_token=flask.session['access_token'].access_token)
+    except KeyError:
+        return flask.redirect(flask.url_for('index'))
+    
+    url = mangler.process_audio(    app.config, 
+                                    flask.request.files, 
+                                    float(flask.request.form['breakiness']),
+                                    client)
+    return flask.redirect(url)
 
 # Main block
 if __name__ == '__main__':
-    print 'loading ', sys.argv[1]
     CFG = loadConfig(sys.argv[1])
-    run(debug=True)
+    run()
 #     run(host='0.0.0.0')
+
 

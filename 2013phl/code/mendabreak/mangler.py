@@ -7,8 +7,8 @@ import tempfile
 import subprocess
 
 # Load in a song, downsample  it, truncate it, chop it up
-def chopsong(infile, n=15):
-    y, sr = librosa.load(infile, sr=1024)
+def chopsong(infile, n=15, sr=1024):
+    y, sr = librosa.load(infile, sr=sr)
     
     # Truncate it to n seconds
     if n is None:
@@ -90,7 +90,7 @@ def activation_upsample(A_low, sr):
 
 
 def break_song(Encoder, infile, n=15, D=None):
-    X = chopsong(infile, n)
+    X = chopsong(infile, n, sr=Encoder.components_.shape[-1])
     A = Encoder.transform(X)
     
     if D is not None:
@@ -132,7 +132,7 @@ def encode_mp3(wavfile):
 
     return mp3file
 
-def process_audio(cfg, files, breakiness):
+def process_audio(cfg, files, breakiness, client):
 
     Encoder, D_hi = initialize_data(cfg['d_lo'], 
                                     cfg['d_hi'], 
@@ -158,6 +158,9 @@ def process_audio(cfg, files, breakiness):
     # Delete the wavfile
     os.unlink(tmp_out)
 
-    # Push the mp3 to soundcloud
-
-    return
+    track = client.post('/tracks', track={
+            'title': '%s [Mend-a-break mix]' % files['data'].name,
+            'asset_data': open(mp3file, 'rb')
+    })
+    
+    return track.permalink_url
