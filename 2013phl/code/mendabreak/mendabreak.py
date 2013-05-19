@@ -31,7 +31,6 @@ def loadConfig(server_ini):
 
 
 def run(**kwargs):
-    print app.config
     app.run(**kwargs)
 
 @app.before_request
@@ -54,7 +53,6 @@ def index():
     if 'access_token' not in flask.session:
         return flask.redirect(flask.g.client.authorize_url())
 
-    print flask.session['access_token'].keys()
     return flask.make_response(flask.render_template('index.html'))
 
 
@@ -69,6 +67,7 @@ def upload():
     
     url = mangler.process_audio(    app.config, 
                                     flask.request.files, 
+                                    flask.request.form['title'],
                                     float(flask.request.form['breakiness']),
                                     client)
     return flask.redirect(url)

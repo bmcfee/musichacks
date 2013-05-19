@@ -6,7 +6,6 @@
         <link   rel="stylesheet"
                 href="/static/bootstrap/css/slate-bootstrap.min.css">
 
-<script src="http://connect.soundcloud.com/sdk.js"></script>
     </head>
 
     <body>
@@ -24,23 +23,43 @@
             <form   action="/upload"
                     method="post" 
                     enctype="multipart/form-data"
-                    class="navbar-form pull-left">
+                    class="navbar-form">
 
-                <input  type="file" name="data" class="pull-right"  />
+                <input  type="file" 
+                        name="data" 
+                        id="file-selector"
+                />
+
+                <div>
+                <input  type="text" 
+                        name="title" 
+                        style="width: 40em;"
+                        id="song-title"
+                        placeholder="Track title" />
+                </div>
 
                 <label>
-                    Breakiness
+                    <span class="pull-left">Less breaky</span>
                     <input  type="range" 
                             name="breakiness" 
                             min="0.05" max="0.85" step="0.05"
                             value="0.25" 
                             />
+                    <span>More breaky</span>
                 </label>
 
-                <button type="submit" class="btn pull-right">Break!</button>
+                <button type="submit" 
+                        class="btn pull-right disabled"
+                        disabled="disabled">Break!</button>
     
             </form>
         </div>
 
     </body>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script> 
+    <script type="text/javascript"> 
+        google.load("jquery", "1.7");
+    </script>
+
+    <script type="text/javascript" src="/static/js/ui.js"></script>
 </html>

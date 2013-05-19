@@ -132,7 +132,7 @@ def encode_mp3(wavfile):
 
     return mp3file
 
-def process_audio(cfg, files, breakiness, client):
+def process_audio(cfg, files, title, breakiness, client):
 
     Encoder, D_hi = initialize_data(cfg['d_lo'], 
                                     cfg['d_hi'], 
@@ -159,8 +159,9 @@ def process_audio(cfg, files, breakiness, client):
     os.unlink(tmp_out)
 
     track = client.post('/tracks', track={
-            'title': '%s [Mend-a-break mix]' % files['data'].name,
+            'title': title,
             'asset_data': open(mp3file, 'rb')
     })
+    os.unlink(mp3file)
     
     return track.permalink_url
