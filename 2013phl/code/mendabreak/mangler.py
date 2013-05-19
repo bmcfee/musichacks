@@ -80,7 +80,8 @@ def activation_upsample(A_low, sr):
         for j in range(k):
             act_res = librosa.resample( A_low[i,j,:,:].squeeze(),
                                         orig_sr=sr_old, 
-                                        target_sr=sr)
+                                        target_sr=sr,
+                                        res_type='zero_order_hold')
             
             # Local-max filter act_res
             A[i,j,:,:min(sr, len(act_res))] = librosa.localmax(act_res) * act_res
@@ -160,6 +161,8 @@ def process_audio(cfg, files, title, breakiness, client):
 
     track = client.post('/tracks', track={
             'title': title,
+            'created_wth': 'Mend-a-break',
+            'tag_list': '"amen break"',
             'asset_data': open(mp3file, 'rb')
     })
     os.unlink(mp3file)
