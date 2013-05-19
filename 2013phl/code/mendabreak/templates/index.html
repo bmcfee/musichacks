@@ -4,13 +4,25 @@
         <meta charset="utf-8">
         <title>Mend-a-break</title>
         <link   rel="stylesheet"
-                href="/static/bootstrap/css/slate-bootstrap.min.css">
+                href="/static/bootstrap/css/cyborg-bootstrap.min.css">
 
+        <style type="text/css">
+            fieldset {
+                padding: 16px;
+            }
+            .hero-unit {
+                background-image: url(/static/i/amen.png);
+                background-repeat: no-repeat;
+            }
+            body {
+                color: #dedede;
+            }
+        </style>
     </head>
 
     <body>
         <div class="hero-unit">
-            <h1>Mend-a-break!</h1>
+            <h1>Mend-a-break</h1>
         </div>
 
         <div class="container">
@@ -19,25 +31,29 @@
 <a href="http://www.youtube.com/watch?v=jo1B4f7ao-Q">the Amen break</a>.
             </p>
         </div>
-        <div class="container">
+        <div class="well">
             <form   action="/upload"
                     method="post" 
                     enctype="multipart/form-data"
                     class="navbar-form">
 
+                <fieldset>
                 <input  type="file" 
                         name="data" 
                         id="file-selector"
                 />
+                </fieldset>
 
-                <div>
+                <fieldset>
                 <input  type="text" 
                         name="title" 
                         style="width: 40em;"
                         id="song-title"
-                        placeholder="Track title" />
-                </div>
+                        placeholder="Track title" 
+                        />
+                </fieldset>
 
+                <fieldset>
                 <label>
                     <span class="pull-left">Less breaky</span>
                     <input  type="range" 
@@ -47,14 +63,17 @@
                             />
                     <span>More breaky</span>
                 </label>
+                </fieldset>
 
                 <button type="submit" 
-                        class="btn pull-right disabled"
+                        class="btn btn-primary btn-large pull-right disabled"
                         disabled="disabled">Break!</button>
     
             </form>
         </div>
-
+    <div>
+    <img class="pull-right" src="http://developers.soundcloud.com/assets/powered_by_large_white-de881ecad8561c2131e7676fa9e92738.png" />
+    </div>
     </body>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script> 
     <script type="text/javascript"> 

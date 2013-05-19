@@ -7,7 +7,8 @@ $("input:file").change( function() {
                             .split('\\').pop()
                             .split('.', 2).shift()
                             .replace(/_/g, ' ')
-                            .replace('-', ' - ') + ' [Mend-a-break mix]');
+                            .replace('-', ' - ') + ' [Mend-a-break remix]');
+
 
     $("button:submit").removeClass('disabled').removeAttr('disabled');
 });
