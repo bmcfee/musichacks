@@ -4,6 +4,7 @@ import CDL
 import numpy as np
 import scipy.signal
 import tempfile
+import subprocess
 
 # Load in a song, downsample  it, truncate it, chop it up
 def chopsong(infile, n=15):
@@ -123,6 +124,13 @@ def initialize_data(path_d_lo, path_d_hi, alpha):
     Encoder.set_codebook(D_low)
     return Encoder, D_high
 
+def encode_mp3(wavfile):
+    
+    code, mp3file = tempfile.mkstemp(suffix='.mp3')
+
+    subprocess.call(['avconv', '-y', '-i', wavfile, '-acodec', 'libmp3lame', mp3file])
+
+    return mp3file
 
 def process_audio(cfg, files, breakiness):
 
@@ -130,15 +138,24 @@ def process_audio(cfg, files, breakiness):
                                     cfg['d_hi'], 
                                     breakiness)
 
+    # Build a temp file for the upload track
     code, tmp_ul = tempfile.mkstemp()
-    print 'temporary name: ', tmp_ul
-
     files['data'].save(tmp_ul)
+
+    # Encode
     yhat, sr = break_song(Encoder, tmp_ul, n=int(cfg['max_time']), D=D_hi)
 
+    # Delete the upload
     os.unlink(tmp_ul)
 
+    # Save the output
     code, tmp_out = tempfile.mkstemp(suffix='.wav')
     librosa.output.write_wav(tmp_out, yhat, sr=sr)
+
+    # Encode the mp3
+    mp3file = encode_mp3(tmp_out)
+    
+    # Delete the wavfile
+    os.unlink(tmp_out)
 
     return
