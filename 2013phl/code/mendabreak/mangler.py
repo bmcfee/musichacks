@@ -1,9 +1,9 @@
-import sys
 import os
 import librosa
 import CDL
 import numpy as np
 import scipy.signal
+import tempfile
 
 # Load in a song, downsample  it, truncate it, chop it up
 def chopsong(infile, n=15):
@@ -68,7 +68,6 @@ def combine_patches(X):
         Z[(i * hop): (i * hop + t)] = Z[(i * hop): (i * hop + t)] + window * X[i]
     return Z
 
-# <codecell>
 
 def activation_upsample(A_low, sr):
     
@@ -78,7 +77,9 @@ def activation_upsample(A_low, sr):
     
     for i in range(n):
         for j in range(k):
-            act_res = librosa.resample(A_low[i,j,:,:].squeeze(), orig_sr=sr_old, target_sr=sr)
+            act_res = librosa.resample( A_low[i,j,:,:].squeeze(),
+                                        orig_sr=sr_old, 
+                                        target_sr=sr)
             
             # Local-max filter act_res
             A[i,j,:,:min(sr, len(act_res))] = librosa.localmax(act_res) * act_res
@@ -86,7 +87,6 @@ def activation_upsample(A_low, sr):
             
     return A
 
-# <codecell>
 
 def break_song(Encoder, infile, n=15, D=None):
     X = chopsong(infile, n)
@@ -106,11 +106,10 @@ def break_song(Encoder, infile, n=15, D=None):
 
     return y, sr
 
-# <codecell>
 
 # Load the low-rate patches
 
-def initialize_data(path_d_lo, path_d_hi, alpha=0.75):
+def initialize_data(path_d_lo, path_d_hi, alpha):
     D_low   = np.load(path_d_lo)
     D_low   = D_low.reshape( (D_low.shape[0], 1, -1) ).astype(np.float32)
 
@@ -125,9 +124,21 @@ def initialize_data(path_d_lo, path_d_hi, alpha=0.75):
     return Encoder, D_high
 
 
-# yhat, sr = break_song(Encoder, '/home/bmcfee/data/CAL500/wav/michael_jackson-billie_jean.wav', n=30, D=D_high)
+def process_audio(cfg, files, breakiness):
 
-# <codecell>
+    Encoder, D_hi = initialize_data(cfg['d_lo'], 
+                                    cfg['d_hi'], 
+                                    breakiness)
 
-# librosa.output.write_wav('/home/bmcfee/Desktop/mj_amen_high.wav', yhat, sr=sr)
+    code, tmp_ul = tempfile.mkstemp()
+    print 'temporary name: ', tmp_ul
 
+    files['data'].save(tmp_ul)
+    yhat, sr = break_song(Encoder, tmp_ul, n=int(cfg['max_time']), D=D_hi)
+
+    os.unlink(tmp_ul)
+
+    code, tmp_out = tempfile.mkstemp(suffix='.wav')
+    librosa.output.write_wav(tmp_out, yhat, sr=sr)
+
+    return

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Mend-a-break</title>
+        <link   rel="stylesheet"
+                href="/static/bootstrap/css/slate-bootstrap.min.css">
+    </head>
+
+    <body>
+        <div class="hero-unit">
+            <h1>Mend-a-break!</h1>
+        </div>
+
+        <div class="container">
+            <p class="lead">
+            Upload a song, and we'll remix it entirely from samples of 
+<a href="http://www.youtube.com/watch?v=jo1B4f7ao-Q">the Amen break</a>.
+            </p>
+        </div>
+        <div class="container">
+            <form   action="/upload"
+                    method="post" 
+                    enctype="multipart/form-data"
+                    class="navbar-form pull-left">
+
+                <input  type="file" name="data" class="pull-right"  />
+
+                <label>
+                    Breakiness
+                    <input  type="range" 
+                            name="breakiness" 
+                            min="0.05" max="5" step="0.05"
+                            value="0.5" 
+                            />
+                </label>
+
+                <button type="submit" class="btn pull-right">Break!</button>
+    
+            </form>
+        </div>
+
+    </body>
+</html>

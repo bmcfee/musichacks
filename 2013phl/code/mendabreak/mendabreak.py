@@ -34,13 +34,14 @@ def index():
     return flask.render_template('index.html')
 
 
-@app.route('/upload')
+@app.route('/upload', methods=['GET', 'POST'])
 def upload():
-   '''upload handler'''
-   Encoder, D_hi = mangler.initialize_data( app.config['D_lo'], 
-                                            app.config['D_hi'],
-                                            flask.request.args['sparsity']) 
-   return []
+    '''upload handler'''
+
+    mangler.process_audio(  app.config, 
+                            flask.request.files, 
+                            float(flask.request.form['breakiness']))
+    return 'wat'
 
 
 
@@ -48,5 +49,6 @@ def upload():
 if __name__ == '__main__':
     print 'loading ', sys.argv[1]
     loadConfig(sys.argv[1])
-    run(host='0.0.0.0')
+    run(debug=True)
+#     run(host='0.0.0.0')
 

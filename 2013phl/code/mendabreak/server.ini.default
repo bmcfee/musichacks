@@ -2,8 +2,9 @@
 root=.
 static=static
 debug=True
-D_lo=/PATH/TO/data/basis_1024.npy
-D_hi=/PATH/TO/data/basis_22050.npy
+d_lo=/path/to/basis_1024.npy
+d_hi=/path/to/basis_22050.npy
+max_time=30
 
 [soundcloud]
 client_id=
