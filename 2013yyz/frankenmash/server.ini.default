@@ -1,0 +1,9 @@
+[server]
+root=.
+static=static
+debug=True
+max_time=30
+
+[soundcloud]
+client_id=
+client_secret=

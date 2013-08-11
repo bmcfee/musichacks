@@ -2,7 +2,7 @@
 
 import flask
 import ConfigParser
-import sys
+import sys, os
 
 import soundcloud
 
@@ -68,14 +68,21 @@ def upload():
     url = mangler.process_audio(    app.config, 
                                     flask.request.files, 
                                     flask.request.form['title'],
-                                    float(flask.request.form['breakiness']),
+                                    float(flask.request.form['alpha']),
                                     client)
     return flask.redirect(url)
 
 # Main block
 if __name__ == '__main__':
-    CFG = loadConfig(sys.argv[1])
-#     run()
-    run(host='0.0.0.0')
+    if len(sys.argv) > 1:
+        CFG = loadConfig(sys.argv[1])
+    else:
+        CFG = loadConfig('server.ini')
+
+    port = 5000
+    if os.environ.get('ENV') == 'production':
+        port = 80
+
+    run(host='0.0.0.0', port=port, debug=DEBUG)
 
 

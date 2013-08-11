@@ -120,6 +120,8 @@ def initialize_data(path_d_lo, path_d_hi, alpha):
 
     Encoder = CDL.ConvolutionalDictionaryLearning(  n_atoms =   D_low.shape[0], 
                                                     n_iter  =   0, 
+                                                    n_jobs  =   4,
+                                                    nonneg  =   True,
                                                     alpha   =   alpha)
     Encoder.fit(np.ones( (1, 1, D_low.shape[2]) ) )
     Encoder.set_codebook(D_low)

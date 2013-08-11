@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Frankenmasher 2000</title>
+        <link   rel="stylesheet"
+                href="/static/bootstrap/css/bootstrap.min.css">
+
+        <style type="css">
+            body { padding-bottom: 70px; }
+        </style>
+    </head>
+
+    <body>
+        <div class="jumbotron">
+            <h1>FRANKENMASHER<small>2000</small></h1>
+
+            <form   action="/upload"
+                    method="post" 
+                    enctype="multipart/form-data"
+                    class="navbar-form">
+
+                <fieldset>
+                    <input  type="file" 
+                            name="song_A" 
+                            id="file-selector-A"
+                    />
+                    <input type="file"
+                            name="song_B"
+                            id="file-selector-B"
+                    />
+                </fieldset>
+
+                <fieldset>
+                    <input  type="text" 
+                            name="title" 
+                            style="width: 40em;"
+                            id="song-title"
+                            placeholder="Track title" 
+                            />
+                </fieldset>
+
+                <fieldset>
+                    <label>
+                        <span class="pull-left">Less vocals</span>
+                        <input  type="range" 
+                                name="alpha" 
+                                min="0.05" max="0.95" step="0.05"
+                                value="0.75" 
+                                />
+                        <span>More vocals</span>
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <button type="submit" 
+                        class="btn btn-primary btn-large pull-left">Mash!</button>
+                </fieldset>
+            </form>
+        </div>
+        <div class="nav navbar navbar-inverse navbar-fixed-bottom">
+            <div class="pull-left navbar-text">
+                <a href="http://cosmal.ucsd.edu/~bmcfee/">Brian McFee</a>, 2013.
+                <p>
+                <a href="https://twitter.com/functiontelechy">@functiontelechy</a>
+                </p>
+            </div>
+
+            <img class="pull-right" src="http://developers.soundcloud.com/assets/powered_by_large_white-de881ecad8561c2131e7676fa9e92738.png" alt="[powered by Soundcloud]" />
+        </div>
+    </body>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script> 
+    <script type="text/javascript"> 
+        google.load("jquery", "1.7");
+    </script>
+</html>
