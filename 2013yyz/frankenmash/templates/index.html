@@ -12,66 +12,82 @@
     </head>
 
     <body>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+            <li><a href="#about" data-toggle="tab">About</a></li>
+        </ul>
         <div class="jumbotron">
+            <ol class="lead small pull-right">
+                <li>Extract the instruments from song A.</li>
+                <li>Extract the vocals from song B.</li>
+                <li>Commit sonic atrocities.</li>
+            </ol>
             <h1>FRANKENMASHER<small>2000</small></h1>
-            <p>
-            Extract the instruments from one song, the vocals from another, and stitch
-            them together into a horrendous crime against nature.
-            </p>
         </div>
-        <div class="container">
 
-            <form   action="/upload"
-                    method="post" 
-                    enctype="multipart/form-data"
-                    class="navbar-form">
+        <div class="tab-content">
+            <div class="tab-pane container" id="about">
+                <h1>Haaaaaaay</h1>
+            </div>
 
-                <div class="row">
-                    <div class="well pull-left col-lg-6 ">
-                        <h2>Instrument track</h2>
-                        <input  type="file" 
-                                name="song_B" 
-                                id="file-selector-B"
-                        />
-                    </div>
-                    <div class="well pull-right col-lg-6">
-                        <h2>Voice track</h2>
-                        <input type="file"
-                                name="song_A"
-                                id="file-selector-A"
-                        />
-                    </div>
-                </div>
+            <div id="home" class="tab-pane active">
 
-                <div class="row well">
-                    <div class="col-lg-2 pull-left"><h4>Less vocals</h4></div>
-                    <div class="col-lg-8">
-                        <input  type="range" 
-                                name="alpha" 
-                                min="0.05" max="0.95" step="0.05"
-                                value="0.75" 
-                                style="width: 100%;"
+                <div class="container">
+                    <form   action="/upload"
+                        method="post" 
+                        enctype="multipart/form-data"
+                        class="navbar-form">
+
+                        <div class="row">
+                            <div class="well pull-left col-lg-6 ">
+                                <h2>Instrument track</h2>
+                                <input  type="file" 
+                                        name="song_B" 
+                                        id="file-selector-B"
                                 />
-                    </div>
-                    <div class="pull-right col-lg-2"><h4>More vocals</h4></div>
+                            </div>
+                            <div class="well pull-right col-lg-6">
+                                <h2>Voice track</h2>
+                                <input type="file"
+                                        name="song_A"
+                                        id="file-selector-A"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="row well">
+                            <div class="col-lg-2 pull-left"><h4>Less vocals</h4></div>
+
+                            <div class="col-lg-8">
+                                <input  type="range" 
+                                        name="alpha" 
+                                        min="0.05" max="0.95" step="0.05"
+                                        value="0.80" 
+                                        style="width: 100%;"
+                                />
+                            </div>
+
+                            <div class="pull-right col-lg-2"><h4>More vocals</h4></div>
+                        </div>
+
+                        <div class="row">
+                            <input  type="text" 
+                                    name="title" 
+                                    class="col-lg-10"
+                                    id="song-title"
+                                    placeholder="Mashup title" 
+                            />
+
+                            <div class="pull-right">
+                                <button type="submit" class="btn btn-primary btn-lg pull-left">Mash!</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
+            </div>
 
-                <div class="row">
-                    <input  type="text" 
-                            name="title" 
-                            class="col-lg-10"
-                            id="song-title"
-                            placeholder="Mashup title" 
-                    />
-
-                    <div class="pull-right">
-                    <button type="submit" 
-                        class="btn btn-primary btn-lg pull-left">Mash!</button>
-                    </div>
-                </div>
-
-            </form>
         </div>
+
         <div class="nav navbar navbar-inverse navbar-fixed-bottom">
             <div class="pull-left navbar-text">
                 <a href="http://cosmal.ucsd.edu/~bmcfee/">Brian McFee</a>, 2013.
@@ -83,8 +99,6 @@
             <img class="pull-right" src="http://developers.soundcloud.com/assets/powered_by_large_white-de881ecad8561c2131e7676fa9e92738.png" alt="[powered by Soundcloud]" />
         </div>
     </body>
-    <script type="text/javascript" src="http://www.google.com/jsapi"></script> 
-    <script type="text/javascript"> 
-        google.load("jquery", "1.7");
-    </script>
+    <script type="text/javascript" src="/static/js/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/bootstrap-tab.js"></script>
 </html>
