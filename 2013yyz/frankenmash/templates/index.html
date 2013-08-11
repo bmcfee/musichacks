@@ -14,10 +14,18 @@
     <body>
         <ul class="nav nav-tabs">
             <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+            <li><a href="#mashes" data-toggle="tab">Frankenmashes</a></li>
             <li><a href="#about" data-toggle="tab">About</a></li>
         </ul>
 
         <div class="tab-content">
+            <div class="tab-pane" id="mashes">
+                <div class="container">
+                   <ul class="list-unstyled" id="mashlist">
+                   </ul>
+                </div>
+            </div>
+
             <div class="tab-pane" id="about">
                 <div class="hero-unit">
                     <h1>FRANKENMASHER<small>2000</small></h1>
@@ -118,4 +126,12 @@
     </body>
     <script type="text/javascript" src="/static/js/jquery-1.10.1.min.js"></script>
     <script type="text/javascript" src="/static/bootstrap/js/bootstrap-tab.js"></script>
+    <script type="text/javascript" src="/static/js/soundcloud.js"></script>
+    <script>
+        SC.initialize({
+            client_id: "{{ client_id }}",
+            redirect_uri: null,
+        });
+    </script>
+    <script type="text/javascript" src="/static/js/frankenmasher.js"></script>
 </html>

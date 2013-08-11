@@ -53,7 +53,7 @@ def index():
     if 'access_token' not in flask.session:
         return flask.redirect(flask.g.client.authorize_url())
 
-    return flask.make_response(flask.render_template('index.html'))
+    return flask.make_response(flask.render_template('index.html', client_id=CFG['soundcloud']['client_id']))
 
 
 @app.route('/upload', methods=['GET', 'POST'])

@@ -205,7 +205,7 @@ def process_audio(cfg, files, title, alpha, client):
     track = client.post('/tracks', track={
             'title': title,
             'created_wth': 'Frankenmasher 2000',
-            'tag_list': '"frankenmash"',
+            'tag_list': 'frankenmasher2000',
             'asset_data': open(mp3file, 'rb')
     })
     os.unlink(mp3file)
