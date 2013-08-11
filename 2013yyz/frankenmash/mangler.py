@@ -141,11 +141,11 @@ def remix(song1, song2, offset=0, duration=45, alpha=0.75,voice=True):
     # Track beats in song 2
     tempo2, beats2 = librosa.beat.beat_track(sr=SR, onsets=onsets(D2), hop_length=HOP_LENGTH, n_fft=N_FFT, trim=False, start_bpm=tempo1)
 
-    # Pad the beat boundaries out
-    
+    # If we don't have enough beats, subsample
     if len(beats2) < len(beats1):
-        tempo2, beats2 = librosa.beat.beat_track(sr=SR, onsets=onsets(D2), hop_length=HOP_LENGTH, n_fft=N_FFT, trim=False, start_bpm=tempo1*2)
+        beats1 = beats1[::len(beats2)]
     
+    # Pad the beat boundaries out
     pad_beats1 = np.unique(np.hstack((0, beats1, D1.shape[1])))
     pad_beats2 = np.unique(np.hstack((0, beats2, D2.shape[1])))
     

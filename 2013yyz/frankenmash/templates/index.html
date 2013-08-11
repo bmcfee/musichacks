@@ -16,21 +16,36 @@
             <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
             <li><a href="#about" data-toggle="tab">About</a></li>
         </ul>
-        <div class="jumbotron">
-            <ol class="lead small pull-right">
-                <li>Extract the instruments from song A.</li>
-                <li>Extract the vocals from song B.</li>
-                <li>Commit sonic atrocities.</li>
-            </ol>
-            <h1>FRANKENMASHER<small>2000</small></h1>
-        </div>
 
         <div class="tab-content">
-            <div class="tab-pane container" id="about">
-                <h1>Haaaaaaay</h1>
+            <div class="tab-pane" id="about">
+                <div class="hero-unit">
+                    <h1>FRANKENMASHER<small>2000</small></h1>
+                    <div class="container">
+                        <img src="/static/i/frankenmasher.svg" alt="[frankenmasher diagram]" />
+                        <div class="pull-right lead">
+                            Tech:
+                            <ul>
+                                <li>Audio processing: <a href="http://github.com/bmcfee/librosa/">LibROSA</a></li>
+                                <li>Phase vocoding in librosa-develop</li>
+                                <li>Source separation: <a href="http://arxiv.org/abs/0912.3599">Robust PCA</a> (<a href="https://github.com/bmcfee/ml_scraps/blob/master/rpca.py">src</a>)
+                                <li>Storage: <a href="http://soundcloud.com/">Soundcloud</a>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div id="home" class="tab-pane active">
+
+                <div class="jumbotron">
+                    <ol class="lead small pull-right">
+                        <li>Extract the instruments from song A.</li>
+                        <li>Extract the vocals from song B.</li>
+                        <li>Commit sonic atrocities.</li>
+                    </ol>
+                    <h1>FRANKENMASHER<small>2000</small></h1>
+                </div>
 
                 <div class="container">
                     <form   action="/upload"
@@ -40,14 +55,14 @@
 
                         <div class="row">
                             <div class="well pull-left col-lg-6 ">
-                                <h2>Instrument track</h2>
+                                <h2>Song A (instruments)</h2>
                                 <input  type="file" 
                                         name="song_B" 
                                         id="file-selector-B"
                                 />
                             </div>
                             <div class="well pull-right col-lg-6">
-                                <h2>Voice track</h2>
+                                <h2>Song B (vocals)</h2>
                                 <input type="file"
                                         name="song_A"
                                         id="file-selector-A"
