@@ -45,6 +45,10 @@ function get_data() {
     $("#main").addClass('hide');
     $("#montage").removeClass('hide');
 
+    if (player != null) {
+        // gonna fly now
+        play_track('t2222711');
+    }
     /* Execute the query */
 
     console.log('waiting for analysis... ');
@@ -131,6 +135,7 @@ function run_the_fight(pl1, pl2) {
             // Player 2 wins
             console.log('Player 2 wins!');
             $("#player2wins").removeClass('hide');
+            $("#player1box").addClass('muted');
             return;
         }
 
@@ -139,6 +144,7 @@ function run_the_fight(pl1, pl2) {
             // Player 1 wins
             console.log('Player 1 wins!');
             $("#player1wins").removeClass('hide');
+            $("#player2box").addClass('muted');
             return;
         }
 
