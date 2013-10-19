@@ -1,4 +1,37 @@
 
+// Set up the radio widget
+
+var radioListener = {};
+var player = null;
+
+radioListener.ready = function() {
+    radioListener.is_ready = true;
+    player = $("#player").get(0);
+}
+
+radioListener.playingTrackChanged = function(playingTrack, sourcePosition) {
+    console.log('Started playing: ' + playingTrack);
+    setTimeout(function() {player.rdio_seek(30.0);}, 0.0);
+}
+
+$(function() {
+
+    $.getJSON(
+        '/rdio', {}, function(data) {
+            if (data) {
+                params = {'playbackToken': data.playbackToken,
+                            'domain':   encodeURIComponent(data.domain),
+                            'listener': 'radioListener'};
+                swfobject.embedSWF( 'http://www.rdio.com/api/swf',
+                                    'player', '1', '1', '9.0.0',
+                                    'swf/expressInstall.swf',
+                                    params,
+                                    {allowScriptAccess: "always"});
+            }
+        });
+
+});
+
 $("#myform").submit(function(event) { get_data(); event.preventDefault();});
 
 function get_data() {
@@ -33,6 +66,16 @@ function get_data() {
     });
 }
 
+function play_track(track_id) {
+    if (player == null) {
+        return;
+    }
+
+    player.rdio_play(track_id);
+    // seek to 30 seconds in
+    player.rdio_seek(30);
+
+}
 
 function run_the_fight(pl1, pl2) {
 
@@ -66,6 +109,7 @@ function run_the_fight(pl1, pl2) {
         }
 
         if (player == 0) {
+            play_track(pl1[round_i].track_id);
             health_2 -= pl1[round_i].score;
             // add pl1[round_i].track to player 1's list
             console.log(pl1[round_i]);
@@ -73,6 +117,7 @@ function run_the_fight(pl1, pl2) {
             $("#songs-1").append($('<li></li>').html(pl1[round_i].title + '   <b>' + Math.round(100  *
             pl1[round_i].score / total_health_2) +'% damage!</b>'));
         } else {
+            play_track(pl2[round_i].track_id);
             health_1 -= pl2[round_i].score;
             // add pl2[round_i].track to player 2's list
             console.log(pl2[round_i]);
@@ -100,7 +145,7 @@ function run_the_fight(pl1, pl2) {
 
         setTimeout( function() {
             fight_round(round_i + player, (player + 1) % 2);
-        }, 750);
+        }, 5000);
     }
 
     // Start the fight

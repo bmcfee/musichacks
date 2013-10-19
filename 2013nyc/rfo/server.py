@@ -5,6 +5,7 @@ import ConfigParser
 import sys, os
 
 import ujson as json
+import rdio
 
 import rep
 
@@ -34,7 +35,19 @@ def run(**kwargs):
 
 @app.before_request
 def before_request():
+
+    try: 
+        flask.g.rdio.refresh()
+    except:
+        flask.g.rdio = rdio.rdio(CFG['rdio'])
+        pass
+
+
     pass
+
+@app.route('/rdio')
+def web_rdio_token():
+    return json.encode(flask.g.rdio.get_token())
 
 @app.route('/query/<artist1>/<artist2>')
 def artist_query(artist1, artist2):
