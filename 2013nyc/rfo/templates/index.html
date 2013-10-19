@@ -9,6 +9,7 @@
         <style type="text/css">
             body { padding-bottom: 70px; }
             .jumbotron { background-color: #4B2F61 ; }
+            .hide { display: none }
         </style>
     </head>
 
@@ -25,6 +26,10 @@
                 </div>
                 <div class="container lead">
                     Tech:
+                    <ul>
+                    <li><a href="http://developer.echonest.com/">Echo Nest API</a></li>
+                    <li><a href="http://github.com/bmcfee/librosa/">LibROSA</a></li>
+                    </ul>
                 </div>
             </div>
 
@@ -32,23 +37,46 @@
                 <div class="jumbotron">
                     <h1>REPETITION FACE-OFF!</h1>
                 </div>
-                <div class="container text-center">
+                <div class="container text-center" id="main">
                     <p class="lead">
                         Which artist is more repetitive?
                     </p>
 
-                    <form id="#myform">
-                    <div class="row">
-                        <input type="text" name="artist1" id="artist1" placeholder="James Brown" />
-                            vs.
-                        <input type="text" name="artist2" id="artist2" placeholder="Daft Punk" />
-                    </div>
+                    <form id="myform">
+                        <div class="row">
+                            <input type="text" id="artist1" placeholder="James Brown" />
+                                vs.
+                            <input type="text" id="artist2" placeholder="Daft Punk" />
+                        </div>
 
-                    <div class="row">
-                        <button type="submit" id="fight" class="btn btn-large btn-danger">FIGHT!</button>
-                    </div>
+                        <div class="row">
+                            <button type="submit" id="fight" class="btn btn-large btn-danger">FIGHT!</button>
+                        </div>
                     </form>
                 </div>
+
+                <div id="thefight" class="container hide">
+                    <div class="col-md-4">
+                        <div class="progress" >
+                            <div id="health1" class="progress-bar progress-bar-danger" 
+                                            role="progressbar" 
+                                            style="width: 100%">
+                            <span class="pull-right" id="artist1-name"></span>
+                            </div>
+                        </div>
+                        <ul id="songs-1"></ul>
+                    </div>
+                    <div class="col-md-4 col-md-offset-4">
+                        <div class="progress" >
+                            <div id="health2" class="progress-bar progress-bar-danger" 
+                                            role="progressbar" 
+                                            style="width: 100%; display: block; float: right">
+                            <span class="pull-left" id="artist2-name"></span>
+                        </div>
+                        <ul id="songs-2"></ul>
+                    </div>
+                </div>
+
             </div>
 
         </div>
@@ -60,10 +88,10 @@
                 <a href="https://twitter.com/functiontelechy">@functiontelechy</a>
                 </p>
             </div>
-
+            <img src="/static/i/EN_P_on_Dark_Transparent_Horizontal.png" class="pull-right">
         </div>
     </body>
     <script type="text/javascript" src="/static/js/jquery-1.10.1.min.js"></script>
-    <script type="text/javascript" src="/static/bootstrap/js/bootstrap-tab.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/tab.js"></script>
     <script type="text/javascript" src="/static/js/rfo.js"></script>
 </html>
