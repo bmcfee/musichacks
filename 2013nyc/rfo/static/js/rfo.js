@@ -11,7 +11,7 @@ radioListener.ready = function() {
 
 radioListener.playingTrackChanged = function(playingTrack, sourcePosition) {
     console.log('Started playing: ' + playingTrack);
-    setTimeout(function() {player.rdio_seek(30.0);}, 0.0);
+    setTimeout(function() {player.rdio_seek(30.0);}, 100);
 }
 
 $(function() {

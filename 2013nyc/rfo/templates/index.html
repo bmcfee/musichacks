@@ -8,7 +8,7 @@
 
         <style type="text/css">
             body { padding-bottom: 70px; }
-            .jumbotron { background-color: #4B2F61 ; }
+            .jumbotron { background-image: url('/static/i/banner.png'); text-shadow: 2px 2px #000;}
             .hide { display: none }
         </style>
     </head>
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <ol id="songs-1"></ol>
-                        <h2 id="player1wins" class="hide text-primary">Victory!</h2>
+                        <h1 id="player1wins" class="hide text-primary">Victory!</h1>
                     </div>
                     <div class="col-md-5 col-md-offset-2" id="player2box">
                         <h2 class="text-right text-warning" id="artist2-name"></h2>
@@ -82,7 +82,7 @@
                             </div>
                         </div>
                         <ol id="songs-2"></ol>
-                        <h2 id="player2wins" class="hide text-primary">Victory!</h2>
+                        <h1 id="player2wins" class="hide text-primary">Victory!</h1>
                     </div>
                 </div>
 
@@ -98,10 +98,8 @@
                 </p>
             </div>
             <div class="pull-right">
-                <div>
                 <img src="/static/i/EN_P_on_Dark_Transparent_Horizontal.png">
-                </div>
-                <img src="/static/i/RdioWhiteLogo.png" style="height: 32px; padding:8px;">
+                <img src="/static/i/RdioWhiteLogo.png" style="height: 28px; padding-left:16px;">
             </div>
         </div>
         <div class="hide" id="player"></div>
