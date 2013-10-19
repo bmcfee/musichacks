@@ -114,7 +114,7 @@ function run_the_fight(pl1, pl2) {
             // add pl1[round_i].track to player 1's list
             console.log(pl1[round_i]);
             console.log('Player 2: ' + (health_2 / total_health_2));
-            $("#songs-1").append($('<li></li>').html(pl1[round_i].title + '   <b>' + Math.round(100  *
+            $("#songs-1").append($('<li></li>').html(pl1[round_i].title + '   <b class="text-danger">' + Math.round(100  *
             pl1[round_i].score / total_health_2) +'% damage!</b>'));
         } else {
             play_track(pl2[round_i].track_id);
@@ -122,7 +122,7 @@ function run_the_fight(pl1, pl2) {
             // add pl2[round_i].track to player 2's list
             console.log(pl2[round_i]);
             console.log('Player 1: ' + (health_1 / total_health_1));
-            $("#songs-2").append($('<li></li>').html(pl2[round_i].title + '  <b>' + Math.round(100  *
+            $("#songs-2").append($('<li></li>').html(pl2[round_i].title + '  <b class="text-danger">' + Math.round(100  *
             pl2[round_i].score /
             total_health_1) +'% damage!</b>'));
         }
