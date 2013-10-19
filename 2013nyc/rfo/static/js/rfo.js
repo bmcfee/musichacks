@@ -10,6 +10,7 @@ function get_data() {
 
     /* switch to the spinner tab*/
     $("#main").addClass('hide');
+    $("#montage").removeClass('hide');
 
     /* Execute the query */
 
@@ -21,6 +22,7 @@ function get_data() {
 
         /* switch to the fight tab */
 
+        $("#montage").addClass('hide');
         $("#thefight").removeClass('hide');
 
         console.log(results);
