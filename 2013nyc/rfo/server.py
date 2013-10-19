@@ -41,7 +41,8 @@ def artist_query(artist1, artist2):
 
     obj1 = rep.get_artist_data(CFG['echonest'], artist1)
     obj2 = rep.get_artist_data(CFG['echonest'], artist2)
-    return json.encode({'playlist': [obj1, obj2]})
+    n = min(len(obj1), len(obj2))
+    return json.encode({'playlist': [obj1[:n], obj2[:n]]})
 
 
 @app.route('/', methods=['GET'])

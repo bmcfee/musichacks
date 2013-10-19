@@ -19,32 +19,36 @@
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane" id="mashes">
-                <div class="container">
-                   <ul class="list-unstyled" id="mashlist">
-                   </ul>
-                </div>
-            </div>
-
             <div class="tab-pane" id="about">
-                    <div class="container">
-                        <h1>REPETITION FACE-OFF</h1>
-                    </div>
-                    <div class="container">
-                        <div class="pull-right lead">
-                            Tech:
-                        </div>
-                    </div>
+                <div class="container">
+                    <h1>REPETITION FACE-OFF</h1>
+                </div>
+                <div class="container lead">
+                    Tech:
+                </div>
             </div>
 
             <div id="home" class="tab-pane active">
-
                 <div class="jumbotron">
-                    <p class="lead small pull-right">
-                    Which artist is more repetitive? Find out!
-                    </p>
+                    <h1>REPETITION FACE-OFF!</h1>
                 </div>
+                <div class="container text-center">
+                    <p class="lead">
+                        Which artist is more repetitive?
+                    </p>
 
+                    <form id="#myform">
+                    <div class="row">
+                        <input type="text" name="artist1" id="artist1" placeholder="James Brown" />
+                            vs.
+                        <input type="text" name="artist2" id="artist2" placeholder="Daft Punk" />
+                    </div>
+
+                    <div class="row">
+                        <button type="submit" id="fight" class="btn btn-large btn-danger">FIGHT!</button>
+                    </div>
+                    </form>
+                </div>
             </div>
 
         </div>
@@ -61,5 +65,5 @@
     </body>
     <script type="text/javascript" src="/static/js/jquery-1.10.1.min.js"></script>
     <script type="text/javascript" src="/static/bootstrap/js/bootstrap-tab.js"></script>
-<!--     <script type="text/javascript" src="/static/js/rfo.js"></script> -->
+    <script type="text/javascript" src="/static/js/rfo.js"></script>
 </html>

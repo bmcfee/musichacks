@@ -33,7 +33,7 @@ def __repetition_score(X, window=9):
 
 def repetition_score(analysis):
     X = np.array([v['timbre'] for v in analysis['segments']])
-    return __repetition_score(X.T)
+    return 500 * __repetition_score(X.T)
 
 
 def get_analysis(url):
@@ -63,6 +63,7 @@ def get_artist_data(cfg, query, n=5):
         value = repetition_score(analysis)
 
         response.append( (value, track_id, s['artist_name'], s['title']) )
-    
-    return sorted(response)
+    response = sorted(response)
+
+    return map(lambda x: {'score': x[0], 'track_id': x[1], 'artist': x[2], 'title': x[3]}, response)
 
