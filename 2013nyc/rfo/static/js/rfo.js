@@ -48,6 +48,7 @@ function get_data() {
     if (player != null) {
         // gonna fly now
         play_track('t2222711');
+//         play_track('t1161326');
     }
     /* Execute the query */
 
@@ -93,6 +94,10 @@ function run_the_fight(pl1, pl2) {
         total_health_1 += pl2[i].score;
     }
 
+    var total_health = Math.max(total_health_1, total_health_2);
+    total_health_1 = total_health;
+    total_health_2 = total_health;
+
     var health_1 = total_health_1;
     var health_2 = total_health_2;
 
@@ -115,6 +120,7 @@ function run_the_fight(pl1, pl2) {
         if (player == 0) {
             play_track(pl1[round_i].track_id);
             health_2 -= pl1[round_i].score;
+            health_2 = Math.max(0, health_2);
             // add pl1[round_i].track to player 1's list
             console.log(pl1[round_i]);
             console.log('Player 2: ' + (health_2 / total_health_2));
@@ -123,6 +129,7 @@ function run_the_fight(pl1, pl2) {
         } else {
             play_track(pl2[round_i].track_id);
             health_1 -= pl2[round_i].score;
+            health_1 = Math.max(0, health_1);
             // add pl2[round_i].track to player 2's list
             console.log(pl2[round_i]);
             console.log('Player 1: ' + (health_1 / total_health_1));
