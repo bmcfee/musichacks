@@ -1,0 +1,14 @@
+[server]
+root=.
+static=static
+max_time=90
+
+[rdio]
+rdio_api_key=
+rdio_secret=
+rdio_domain=localhost
+rdio_playback_ttl=86400
+
+[echonest]
+echonest_api_key=
+
