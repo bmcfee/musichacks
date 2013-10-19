@@ -68,16 +68,22 @@ function run_the_fight(pl1, pl2) {
             // add pl1[round_i].track to player 1's list
             console.log(pl1[round_i]);
             console.log('Player 2: ' + (health_2 / total_health_2));
+            $("#songs-1").append($('<li></li>').html(pl1[round_i].title + '   <b>' + Math.round(100  *
+            pl1[round_i].score / total_health_2) +'% damage!</b>'));
         } else {
             health_1 -= pl2[round_i].score;
             // add pl2[round_i].track to player 2's list
             console.log(pl2[round_i]);
             console.log('Player 1: ' + (health_1 / total_health_1));
+            $("#songs-2").append($('<li></li>').html(pl2[round_i].title + '  <b>' + Math.round(100  *
+            pl2[round_i].score /
+            total_health_1) +'% damage!</b>'));
         }
         update_p1();
         if (health_1 <= 1e-10) {
             // Player 2 wins
             console.log('Player 2 wins!');
+            $("#player2wins").removeClass('hide');
             return;
         }
 
@@ -85,13 +91,14 @@ function run_the_fight(pl1, pl2) {
         if (health_2 <= 1e-10) {
             // Player 1 wins
             console.log('Player 1 wins!');
+            $("#player1wins").removeClass('hide');
             return;
         }
 
 
         setTimeout( function() {
             fight_round(round_i + player, (player + 1) % 2);
-        }, 500);
+        }, 750);
     }
 
     // Start the fight
