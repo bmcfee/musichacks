@@ -14,6 +14,7 @@ radioListener.playingTrackChanged = function(playingTrack, sourcePosition) {
     setTimeout(function() {player.rdio_seek(30.0);}, 100);
 }
 
+
 $(function() {
 
     $.getJSON(
@@ -32,6 +33,16 @@ $(function() {
 
 });
 
+$("#restart").click(function(event) { 
+
+    $("#thefight").addClass('hide');
+    $('#montage').addClass('hide');
+    $('#main').removeClass('hide');
+    
+    player.rdio_stop();
+    event.preventDefault();
+});
+
 $("#myform").submit(function(event) { get_data(); event.preventDefault();});
 
 function get_data() {
@@ -47,12 +58,10 @@ function get_data() {
 
     if (player != null) {
         // gonna fly now
-//         play_track('t2222711');
-//         play_track('t1161326');
         play_track('t24821479');
     }
-    /* Execute the query */
 
+    /* Execute the query */
     console.log('waiting for analysis... ');
     $.ajax({
         url: "/query/" + artist1 + "/" + artist2,
@@ -144,6 +153,7 @@ function run_the_fight(pl1, pl2) {
             console.log('Player 2 wins!');
             $("#player2wins").removeClass('hide');
             $("#player1box").addClass('muted');
+            $("#restart").removeClass('hide');
             return;
         }
 
@@ -153,13 +163,14 @@ function run_the_fight(pl1, pl2) {
             console.log('Player 1 wins!');
             $("#player1wins").removeClass('hide');
             $("#player2box").addClass('muted');
+            $("#restart").removeClass('hide');
             return;
         }
 
 
         setTimeout( function() {
             fight_round(round_i + player, (player + 1) % 2);
-        }, 5000);
+        }, 7500);
     }
 
     // Start the fight

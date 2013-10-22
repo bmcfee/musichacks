@@ -7,7 +7,7 @@
                 href="/static/bootstrap/css/slate-bootstrap.min.css">
 
         <style type="text/css">
-            body { padding-bottom: 70px; font-size: 24px; }
+            body { padding-bottom: 70px; font-size: 18px; }
             .jumbotron { background-image: url('/static/i/banner.png'); text-shadow: 2px 2px #000;}
             .hide { display: none }
         </style>
@@ -62,7 +62,8 @@
                 </div>
 
                 <div id="thefight" class="container hide">
-                    <div class="col-md-5" id="player1box">
+                    <div class="row"><button id="restart" class="hide btn btn-large btn-primary">Play again?</button></div>
+                    <div class="col-md-6" id="player1box">
                         <h2 class="text-warning" id="artist1-name"></h2>
                         <div class="progress" >
                             <div id="health1" class="progress-bar progress-bar-danger" 
@@ -73,7 +74,7 @@
                         <ol id="songs-1"></ol>
                         <h1 id="player1wins" class="hide text-primary">Victory!</h1>
                     </div>
-                    <div class="col-md-5 col-md-offset-2" id="player2box">
+                    <div class="col-md-6" id="player2box">
                         <h2 class="text-right text-warning" id="artist2-name"></h2>
                         <div class="progress" >
                             <div id="health2" class="progress-bar progress-bar-danger" 
