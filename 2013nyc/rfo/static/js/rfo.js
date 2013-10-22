@@ -38,7 +38,11 @@ $("#restart").click(function(event) {
     $("#thefight").addClass('hide');
     $('#montage').addClass('hide');
     $('#main').removeClass('hide');
-    
+    $('#player1wins').addClass('hide');
+    $('#player2wins').addClass('hide');
+    $('#songs-1 > li').remove();
+    $('#songs-2 > li').remove();
+    $('#restart').addClass('hide');
     player.rdio_stop();
     event.preventDefault();
 });
