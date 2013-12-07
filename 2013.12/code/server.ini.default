@@ -1,0 +1,5 @@
+[server]
+root=.
+static=static
+max_time=90
+
