@@ -152,5 +152,5 @@ def string_query(query):
     # Return everything except the original query
     return sorted(list(results - set([query])))
 
-def search(query, k=10):
+def search(query, k=30):
     return string_query(query)[:k]
