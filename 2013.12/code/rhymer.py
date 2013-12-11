@@ -6,17 +6,19 @@
 import nltk
 import cPickle as pickle
 
-arpabet = nltk.corpus.cmudict.dict()
+arpabet = None
+# nltk.corpus.cmudict.dict()
 
 English = None
 food_mapping = None
 
 def init(CFG):
+    global arpabet
     global English
     global food_mapping
 
     with open(CFG['server']['rhymer_data'], 'r') as f:
-        English, food_mapping = pickle.load(f)
+        arpabet, English, food_mapping = pickle.load(f)
 
 
 def syllabify(language, word) :

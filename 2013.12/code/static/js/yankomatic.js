@@ -6,6 +6,8 @@ $("#myform").submit(function(event) {
 function get_data() {
     var query = $("#query").val();
 
+    $('#noresults').addClass('hide');
+
     // Execute the query
     $.ajax({
         url: "/search/" + query,
@@ -19,8 +21,9 @@ function get_data() {
             $('#noresults').removeClass('hide');
             return;
         }
-        $('#noresults').addClass('hide');
-
+        $('ul').css('column-count', Math.min(3, results.length));
+        $('ul').css('-moz-column-count', Math.min(3, results.length));
+        $('ul').css('-webkit-column-count', Math.min(3, results.length));
         for (var i = 0; i < results.length; i++){
             $("#results").append($('<li class="list-group-item"></li>').html(results[i]));
         }

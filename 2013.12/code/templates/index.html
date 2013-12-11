@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>A.L.</title>
+        <title>The Yankomatic</title>
         <link   rel="stylesheet"
                 href="/static/bootstrap/css/cyborg-bootstrap.min.css">
 
@@ -10,16 +10,14 @@
             body { padding-bottom: 70px; font-size: 18px; }
             .hide { display: none }
             ul {
-                -moz-column-count: 3;
-                -webkit-column-count: 3;
-                column-count: 3;
-            overflow:hidden;            
+                -moz-column-count:      3;
+                -webkit-column-count:   3;
+                column-count:           3;
             }
 
-
             li:hover {
-                color: white;
-                background: blue;
+                color: #ece7f2;
+                background: #2b8cbe;
             }
 
             .hide { display: none }
@@ -31,7 +29,7 @@
         <div class="jumbotron">
             <div class="pull-right">
                 <form id="myform">
-                    <input type="text" id="query" size="50" placeholder="Weclome to the jungle" />
+                    <input type="text" id="query" size="50" placeholder="Welcome to the jungle" />
                     <button type="submit" id="search" class="btn btn-large
                     btn-danger"><span class="glyphicon glyphicon-search"></span></button>
                 </form>
@@ -46,6 +44,15 @@
         </div>
         <div class="content">
             <ul id="results" class="list-group"></ul>
+        </div>
+
+        <div class="nav navbar navbar-inverse navbar-fixed-bottom" style="font-size: 12px;">
+            <div class="pull-left navbar-text">
+                <a href="http://cosmal.ucsd.edu/~bmcfee/">Brian McFee</a>, 2013.
+                <p>
+                <a href="https://twitter.com/functiontelechy">@functiontelechy</a>
+                </p>
+            </div>
         </div>
     </body>
 

@@ -48,11 +48,18 @@ if __name__ == '__main__':
     else:
         CFG = load_config('server.ini')
 
+    if os.environ.get('ENV') == 'production':
+        port = int(os.environ.get('PORT'))
+
+    if len(sys.argv) > 2:
+        port = int(sys.argv[2])
+    else:
+        port = 5000
+
+    os.environ['NLTK_DATA'] = CFG['server']['nltk_data']
+
     rhymer.init(CFG)
 
-    port = 5000
-    if os.environ.get('ENV') == 'production':
-        port = 80
 
     run(host='0.0.0.0', port=port, debug=DEBUG)
 
