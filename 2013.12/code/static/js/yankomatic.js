@@ -16,8 +16,10 @@ function get_data() {
         $("#results > li").remove();
         if (results.length == 0) {
             // No results, not funny
+            $('#noresults').removeClass('hide');
             return;
         }
+        $('#noresults').addClass('hide');
 
         for (var i = 0; i < results.length; i++){
             $("#results").append($('<li class="list-group-item"></li>').html(results[i]));
