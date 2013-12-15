@@ -3,11 +3,14 @@
 
 # <codecell>
 
+import urllib2, BeautifulSoup
 import nltk
-import BeautifulSoup
-import urllib2
+
 from pprint import pprint
+
 import cPickle as pickle
+
+import itertools
 
 # <codecell>
 
@@ -101,18 +104,6 @@ def syllabify(language, word) :
 
 	return syllables
 
-def stringify(syllables) :
-	'''This function takes a syllabification returned by syllabify and
-	   turns it into a string, with phonemes spearated by spaces and
-	   syllables spearated by periods.'''
-	ret = []
-	for syl in syllables :
-		stress, onset, nucleus, coda = syl
-		if stress != None and len(nucleus) != 0 :
-			nucleus[0] += str(stress)
-		ret.append(" ".join(onset + nucleus + coda))
-	return " . ".join(ret)
-
 # <codecell>
 
 def expand_dictionary(food_words):
@@ -127,23 +118,53 @@ def expand_dictionary(food_words):
 
 # <codecell>
 
-arpabet = nltk.corpus.cmudict.dict()
-
-# <codecell>
-
 # 1. Get food words
 # Food url is http://www.food.com/library/all.zsp
-def get_food_data():
+def get_food_com_data():
     f = urllib2.urlopen('http://www.food.com/library/all.zsp')
     raw_food_data = BeautifulSoup.BeautifulSoup(f)
     f.close()
     return raw_food_data
 
-# <codecell>
-
-def get_foods(raw_data):
+def get_food_com_foods(raw_data):
     content = raw_data.findAll('div', 'content')[0]
     return expand_dictionary([item.findAll('a')[0]['title'].lower() for item in content.findAll('li')])
+
+# <codecell>
+
+def get_foodterms_data():
+    base_url = 'http://www.foodterms.com/'
+    pages = list('abcdefghijklmnopqrstuvw')
+    pages.append('xyz')
+    
+    terms = set()
+    visited_urls = set()
+    
+    my_urls = ['%s/encyclopedia/%s/index.html' % (base_url, s) for s in pages]
+    while len(my_urls) > 0:
+        url = my_urls.pop(0)
+        
+        if url in visited_urls:
+            continue
+            
+        visited_urls.add(url)
+        
+        # Pull the data
+        f = urllib2.urlopen(url)
+        raw_food_data = BeautifulSoup.BeautifulSoup(f)
+        f.close()
+        
+        # Extract food words
+        food_lists = raw_food_data.findAll('ul', 'idxlist')
+        for content in food_lists:
+            terms.update(expand_dictionary([item.findAll('a')[0].string.lower() for item in content.findAll('li')]))
+            
+        # Get any remaining links for this letter
+        for nav in raw_food_data.findAll('ul', 'pglnks'):
+            for new_link in nav.findAll('a'):
+                my_urls.append('%s%s' % (base_url, new_link['href']))
+    
+    return terms
 
 # <codecell>
 
@@ -166,40 +187,67 @@ def analyze_rhyme(phonemes):
 
 # <codecell>
 
-# Use the P2TK syllabifier
-# Count syllables in each word
-# word => (tail, # syllables)
-# 'tail' is the last syllable minus the onset
+arpabet = nltk.corpus.cmudict.dict()
 
 # <codecell>
 
-raw_food_data = get_food_data()
+raw_food_data = get_food_com_data()
 
 # <codecell>
 
-food_strings = get_foods(raw_food_data)
+food_strings = get_food_com_foods(raw_food_data)
 
 # <codecell>
 
+food_strings2 = get_foodterms_data()
+
+# <codecell>
+
+pprint(food_strings)
+pprint(food_strings2)
+
+# <codecell>
+
+food_strings = sorted(list(set(food_strings) | set(food_strings2)))
+
+# <codecell>
+
+pprint(food_strings)
+
+# <codecell>
+
+### Multi-word version
 # stress -> ending -> list of words
 food_mapping = {}
-for s in food_strings:
+for food in food_strings:
     # tokenize s
-    #s = nltk.tokenize.word_tokenize(s)
+    s = nltk.tokenize.word_tokenize(food)
     
-    if s in arpabet:
-        for p in arpabet[s]:
-            stresses, tail = analyze_rhyme(p)
-            key_str = ''.join(map(str, stresses))
-            key_end = '_'.join(tail)
-            
-            if key_str not in food_mapping:
-                food_mapping[key_str] = {}
+    # Get rid of any words not in the arpabet
+    if len(filter(lambda x: x not in arpabet, s)) > 0:
+        continue
+    
+    for words in itertools.product(*map(arpabet.get, s)):
+        
+        analysis = [analyze_rhyme(w) for w in words]
+        
+        # analysis[i] is a tuple of stress and tail
+        # stress pattern will be the concatenation of stresses
+        key_str = ''.join([''.join(map(str, a[0])) for a in analysis])
+        key_tail = '_'.join(analysis[-1][-1])
+        print food, key_str, key_tail
+        
+        if key_str not in food_mapping:
+            food_mapping[key_str] = {}
                 
-            if key_end not in food_mapping[key_str]:
-                food_mapping[key_str][key_end] = set()
+        if key_tail not in food_mapping[key_str]:
+            food_mapping[key_str][key_tail] = set()
                 
-            food_mapping[key_str][key_end].add(s)
+        food_mapping[key_str][key_tail].add(food)
+
+# <codecell>
+
+pprint(food_mapping)
 
 # <codecell>
 
@@ -247,11 +295,11 @@ def string_query(food_mapping, query):
 
 # <codecell>
 
-# Save the language and dictionary files
-with open('/home/bmcfee/git/musichacks/2013.12/data/model.pickle', 'w') as f:
-    pickle.dump([English, food_mapping], f)
+string_query(food_mapping, "bonus")
 
 # <codecell>
 
-string_query(food_mapping, "welcome to the jungle")
+# Save the language and dictionary files
+with open('/home/bmcfee/git/musichacks/2013.12/code/model.pickle', 'w') as f:
+    pickle.dump([arpabet, English, food_mapping], f, protocol=-1)
 
